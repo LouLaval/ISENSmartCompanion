@@ -1,8 +1,10 @@
 package fr.isen.laval.isensmartcompanion
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -12,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.draw.clip
@@ -33,6 +36,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AssistantScreen() {
     var question by remember { mutableStateOf(TextFieldValue("")) }
+    var response by remember { mutableStateOf("Posez-moi une question !") }
+    val context = LocalContext.current // Permet d'afficher un Toast
 
     Column(
         modifier = Modifier
@@ -58,11 +63,20 @@ fun AssistantScreen() {
 
         Spacer(modifier = Modifier.weight(1f))
 
+        // Response Text
+        Text(
+            text = response,
+            fontSize = 16.sp,
+            color = Color.DarkGray,
+            modifier = Modifier.padding(16.dp)
+        )
+
         // Input Field with Send Button
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(20.dp))
+                .background(Color(0xFFE0E0E0)) // Fond gris clair pour mieux coller au design
                 .padding(4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -70,7 +84,12 @@ fun AssistantScreen() {
                 value = question,
                 onValueChange = { question = it },
                 placeholder = { Text("Écrivez votre question...") }, // Champ vide comme sur l'image
-
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color(0xFFE0E0E0),
+                    unfocusedContainerColor = Color(0xFFE0E0E0),
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
                 modifier = Modifier
                     .weight(1f)
                     .clip(RoundedCornerShape(16.dp))
@@ -80,15 +99,19 @@ fun AssistantScreen() {
 
             // Send Button with Material Icon
             IconButton(
-                onClick = { /* Action à ajouter plus tard */ },
+                onClick = {
+                    Toast.makeText(context, "Question Submitted", Toast.LENGTH_SHORT).show()
+                    response = "Vous avez demandé : ${question.text}" // Change le texte de réponse
+                },
                 modifier = Modifier
                     .size(48.dp)
                     .clip(RoundedCornerShape(50))
+                    .background(Color.Red)
             ) {
                 Icon(
                     imageVector = Icons.Filled.Send,
                     contentDescription = "Envoyer",
-                    tint = Color.Red
+                    tint = Color.White
                 )
             }
         }
