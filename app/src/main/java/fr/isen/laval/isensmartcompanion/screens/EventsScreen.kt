@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.platform.LocalContext
 
+
 @Composable
 fun EventsScreen() {
     // Liste d'événements factices
@@ -38,9 +39,14 @@ fun EventItem(event: Event) {
             .fillMaxWidth()
             .padding(vertical = 8.dp)
             .clickable {
-                // Lancer EventDetailActivity avec l'ID de l'événement
+                // Lancer EventDetailActivity avec les informations de l'événement
                 val intent = Intent(context, EventDetailActivity::class.java).apply {
                     putExtra("eventId", event.id) // Passer l'ID de l'événement
+                    putExtra("eventTitle", event.title)
+                    putExtra("eventDescription", event.description)
+                    putExtra("eventDate", event.date)
+                    putExtra("eventLocation", event.location)
+                    putExtra("eventCategory", event.category)
                 }
                 context.startActivity(intent)
             },
@@ -48,12 +54,6 @@ fun EventItem(event: Event) {
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = event.title, style = MaterialTheme.typography.titleMedium)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = event.description, style = MaterialTheme.typography.bodyMedium)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Date: ${event.date}", style = MaterialTheme.typography.bodySmall)
-            Text(text = "Location: ${event.location}", style = MaterialTheme.typography.bodySmall)
-            Text(text = "Category: ${event.category}", style = MaterialTheme.typography.bodySmall)
         }
     }
 }

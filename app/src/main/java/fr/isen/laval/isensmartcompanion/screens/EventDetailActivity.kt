@@ -14,22 +14,39 @@ class EventDetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            EventDetailScreen() // Appel de la fonction Composable pour afficher l'UI
+            val eventId = intent.getIntExtra("eventId", -1) // Récupérer l'ID de l'événement
+            val eventTitle = intent.getStringExtra("eventTitle") ?: ""
+            val eventDescription = intent.getStringExtra("eventDescription") ?: ""
+            val eventDate = intent.getStringExtra("eventDate") ?: ""
+            val eventLocation = intent.getStringExtra("eventLocation") ?: ""
+            val eventCategory = intent.getStringExtra("eventCategory") ?: ""
+
+            EventDetailScreen(eventTitle, eventDescription, eventDate, eventLocation, eventCategory)
         }
     }
 }
 
 @Composable
-fun EventDetailScreen() {
-    // Contenu de ton écran de détails d'événement
+fun EventDetailScreen(
+    eventTitle: String,
+    eventDescription: String,
+    eventDate: String,
+    eventLocation: String,
+    eventCategory: String
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Détails de l'événement", style = MaterialTheme.typography.headlineLarge)
-        Spacer(modifier = Modifier.height(20.dp))
-        // Ajouter ici plus de détails de l'événement
+        Text(text = eventTitle, style = MaterialTheme.typography.headlineMedium)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(text = "Description: $eventDescription", style = MaterialTheme.typography.bodyMedium)
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(text = "Date: $eventDate", style = MaterialTheme.typography.bodySmall)
+        Text(text = "Location: $eventLocation", style = MaterialTheme.typography.bodySmall)
+        Text(text = "Category: $eventCategory", style = MaterialTheme.typography.bodySmall)
     }
 }
