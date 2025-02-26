@@ -61,7 +61,7 @@ fun EventDetailContent(event: Event) {
         text = event.title,
         fontSize = 26.sp,
         fontWeight = FontWeight.Bold,
-        color = Color(0xFFB71C1C) // Rouge foncé
+        color = Color(0xFF212121)
     )
 
     Spacer(modifier = Modifier.height(16.dp))
@@ -72,7 +72,7 @@ fun EventDetailContent(event: Event) {
         elevation = CardDefaults.cardElevation(6.dp),
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFFFEBEE) // Fond rouge très clair
+            containerColor = Color(0xFFEEEEEE) // Fond
         )
     ) {
         Column(

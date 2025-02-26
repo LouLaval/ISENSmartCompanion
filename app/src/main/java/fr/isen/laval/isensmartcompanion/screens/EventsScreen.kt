@@ -89,7 +89,7 @@ fun EventItem(event: Event, navController: NavController) {
         shape = RoundedCornerShape(12.dp), // Coins arrondis
         elevation = CardDefaults.cardElevation(6.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFFFEBEE) // Fond rouge clair uniforme
+            containerColor = Color(0xFFEEEEEE) // Fond
         )
     ) {
         Column(
@@ -103,7 +103,7 @@ fun EventItem(event: Event, navController: NavController) {
                 text = event.title,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFFB71C1C) // Rouge foncé
+                color = Color(0xFF212121)
             )
         }
     }
