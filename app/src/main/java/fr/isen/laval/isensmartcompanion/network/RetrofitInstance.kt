@@ -12,4 +12,3 @@ object RetrofitInstance {
             .create(EventApiService::class.java)
     }
 }
-
