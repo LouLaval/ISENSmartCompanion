@@ -2,10 +2,11 @@ package fr.isen.laval.isensmartcompanion.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavBackStackEntry
@@ -13,26 +14,17 @@ import androidx.navigation.NavController
 import fr.isen.laval.isensmartcompanion.screens.Event
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.ui.text.font.FontWeight
-import fr.isen.laval.isensmartcompanion.screens.EventsViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-/*
 @Composable
 fun EventDetailScreen(navController: NavController, backStackEntry: NavBackStackEntry, eventsViewModel: EventsViewModel) {
-    // Récupérer l'ID de l'événement depuis les arguments de la navigation et le convertir en Int
-    val eventId = backStackEntry.arguments?.getString("eventId")?.toIntOrNull()
+    // Récupérer l'ID de l'événement depuis les arguments de la navigation
+    val eventId = backStackEntry.arguments?.getString("eventId")
 
-    // Trouver l'événement dans le ViewModel avec l'ID
-    val event = eventsViewModel.events.find { it.id == eventId }
+    // Trouver l'événement dans le ViewModel avec l'ID en tant que String
+    val event = eventsViewModel.events.find { it.id.toString() == eventId }
 
     // Si l'événement n'est pas trouvé, afficher un message "Événement introuvable"
     if (event == null) {
@@ -48,6 +40,7 @@ fun EventDetailScreen(navController: NavController, backStackEntry: NavBackStack
         EventDetailContent(event)
     }
 }
+
 
 @Composable
 fun EventDetailContent(event: Event) {
@@ -127,4 +120,3 @@ fun DetailItem(label: String, value: String, icon: androidx.compose.ui.graphics.
         }
     }
 }
-*/
