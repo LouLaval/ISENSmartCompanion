@@ -13,6 +13,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import fr.isen.laval.isensmartcompanion.screens.Event
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Category
@@ -26,67 +27,69 @@ fun EventDetailScreen(navController: NavController, backStackEntry: NavBackStack
     // Trouver l'événement dans le ViewModel avec l'ID en tant que String
     val event = eventsViewModel.events.find { it.id.toString() == eventId }
 
-    // Si l'événement n'est pas trouvé, afficher un message "Événement introuvable"
-    if (event == null) {
-        Text(
-            text = "Événement introuvable",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            modifier = Modifier.padding(16.dp)
-        )
-    } else {
-        // Sinon, afficher les détails de l'événement
-        EventDetailContent(event)
+    Scaffold(
+        topBar = { EventDetailTopBar(navController) }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if (event == null) {
+                Text(
+                    text = "Événement introuvable",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            } else {
+                EventDetailContent(event)
+            }
+        }
     }
 }
 
 
 @Composable
 fun EventDetailContent(event: Event) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Spacer(modifier = Modifier.height(16.dp))
+    Spacer(modifier = Modifier.height(16.dp))
 
-        // Titre de l'événement
-        Text(
-            text = event.title,
-            fontSize = 26.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFFB71C1C) // Rouge foncé
+    // Titre de l'événement
+    Text(
+        text = event.title,
+        fontSize = 26.sp,
+        fontWeight = FontWeight.Bold,
+        color = Color(0xFFB71C1C) // Rouge foncé
+    )
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+    // Carte contenant les détails de l'événement
+    Card(
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(6.dp),
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = Color(0xFFFFEBEE) // Fond rouge très clair
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Carte contenant les détails de l'événement
-        Card(
-            shape = RoundedCornerShape(12.dp),
-            elevation = CardDefaults.cardElevation(6.dp),
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = Color(0xFFFFEBEE) // Fond rouge très clair
-            )
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            horizontalAlignment = Alignment.Start
         ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.Start
-            ) {
-                DetailItem(label = "Date", value = event.date, icon = Icons.Default.CalendarToday)
-                DetailItem(label = "Lieu", value = event.location, icon = Icons.Default.LocationOn)
-                DetailItem(label = "Catégorie", value = event.category, icon = Icons.Default.Category)
+            DetailItem(label = "Date", value = event.date, icon = Icons.Default.CalendarToday)
+            DetailItem(label = "Lieu", value = event.location, icon = Icons.Default.LocationOn)
+            DetailItem(label = "Catégorie", value = event.category, icon = Icons.Default.Category)
 
-                Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-                Text(
-                    text = event.description,
-                    fontSize = 18.sp,
-                    color = Color.Black
-                )
-            }
+            Text(
+                text = event.description,
+                fontSize = 18.sp,
+                color = Color.Black
+            )
         }
     }
 }
@@ -100,7 +103,7 @@ fun DetailItem(label: String, value: String, icon: androidx.compose.ui.graphics.
         Icon(
             imageVector = icon,
             contentDescription = label,
-            tint = Color.Black,
+            tint = Color.Black, // Icônes en noir
             modifier = Modifier.size(20.dp)
         )
         Spacer(modifier = Modifier.width(8.dp))
@@ -110,7 +113,7 @@ fun DetailItem(label: String, value: String, icon: androidx.compose.ui.graphics.
                 text = label,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black
+                color = Color.Black // Catégories en gras et noir
             )
             Text(
                 text = value,
@@ -119,4 +122,23 @@ fun DetailItem(label: String, value: String, icon: androidx.compose.ui.graphics.
             )
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EventDetailTopBar(navController: NavController) {
+    TopAppBar(
+        navigationIcon = {
+            IconButton(onClick = { navController.popBackStack() }) {
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Retour")
+            }
+        },
+        title = {
+            Text(
+                text = "Détails de l'événement",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    )
 }
