@@ -14,12 +14,11 @@ class EventDetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val eventId = intent.getIntExtra("eventId", -1) // Récupérer l'ID de l'événement
-            val eventTitle = intent.getStringExtra("eventTitle") ?: ""
-            val eventDescription = intent.getStringExtra("eventDescription") ?: ""
-            val eventDate = intent.getStringExtra("eventDate") ?: ""
-            val eventLocation = intent.getStringExtra("eventLocation") ?: ""
-            val eventCategory = intent.getStringExtra("eventCategory") ?: ""
+            val eventTitle = intent.getStringExtra("eventTitle") ?: "No Title"
+            val eventDescription = intent.getStringExtra("eventDescription") ?: "No Description"
+            val eventDate = intent.getStringExtra("eventDate") ?: "No Date"
+            val eventLocation = intent.getStringExtra("eventLocation") ?: "No Location"
+            val eventCategory = intent.getStringExtra("eventCategory") ?: "No Category"
 
             EventDetailScreen(eventTitle, eventDescription, eventDate, eventLocation, eventCategory)
         }
@@ -46,7 +45,9 @@ fun EventDetailScreen(
         Text(text = "Description: $eventDescription", style = MaterialTheme.typography.bodyMedium)
         Spacer(modifier = Modifier.height(8.dp))
         Text(text = "Date: $eventDate", style = MaterialTheme.typography.bodySmall)
+        Spacer(modifier = Modifier.height(4.dp))
         Text(text = "Location: $eventLocation", style = MaterialTheme.typography.bodySmall)
+        Spacer(modifier = Modifier.height(4.dp))
         Text(text = "Category: $eventCategory", style = MaterialTheme.typography.bodySmall)
     }
 }
