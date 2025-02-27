@@ -18,11 +18,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import fr.isen.laval.isensmartcompanion.ui.theme.ISENSmartCompanionTheme
-import fr.isen.laval.isensmartcompanion.ai.GeminiApiHelper // Import Gemini API Helper
+import fr.isen.laval.isensmartcompanion.ai.GeminiApiHelper
 import kotlinx.coroutines.launch
+import com.google.ai.client.generativeai.GenerativeModel
+import fr.isen.laval.isensmartcompanion.data.InteractionViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 class MainActivity : ComponentActivity() {
     private lateinit var geminiApiHelper: GeminiApiHelper
@@ -36,19 +38,21 @@ class MainActivity : ComponentActivity() {
         // Passer geminiApiHelper à AssistantScreen
         setContent {
             ISENSmartCompanionTheme {
-                AssistantScreen(geminiApiHelper)  // Passer l'instance ici
+                AssistantScreen(geminiApiHelper)
             }
         }
     }
 }
 
 @Composable
-fun AssistantScreen(geminiApiHelper: GeminiApiHelper) {
-    var question by remember { mutableStateOf(TextFieldValue("")) }
-    var response by remember { mutableStateOf("Posez-moi une question !") }
+fun AssistantScreen(geminiApiHelper: GeminiApiHelper, viewModel: InteractionViewModel = viewModel()) {
+    var question by remember { mutableStateOf("") }
+    var lastQuestion by remember { mutableStateOf<String?>(null) }
+    var response by remember { mutableStateOf<String?>(null) }
     val context = LocalContext.current
-    val geminiApiHelper = remember { GeminiApiHelper(context) } // Initialisation API
-    val coroutineScope = rememberCoroutineScope() // Pour exécuter des tâches asynchrones
+    val coroutineScope = rememberCoroutineScope()
+
+    val generativeModel = GenerativeModel("gemini-1.5-flash", "AIzaSyDnF7yGPomooqLkOQ77nfoXbxI0z1xjO-k")
 
     Column(
         modifier = Modifier
@@ -75,12 +79,14 @@ fun AssistantScreen(geminiApiHelper: GeminiApiHelper) {
         Spacer(modifier = Modifier.weight(1f))
 
         // Response Text
-        Text(
-            text = response,
-            fontSize = 16.sp,
-            color = Color.DarkGray,
-            modifier = Modifier.padding(16.dp)
-        )
+        response?.let {
+            Text(
+                text = it,
+                fontSize = 16.sp,
+                color = Color.DarkGray,
+                modifier = Modifier.padding(16.dp)
+            )
+        }
 
         // Input Field with Send Button
         Row(
@@ -111,15 +117,14 @@ fun AssistantScreen(geminiApiHelper: GeminiApiHelper) {
             // Send Button
             IconButton(
                 onClick = {
-                    if (question.text.isNotBlank()) {
+                    if (question.isNotBlank()) {
                         Toast.makeText(context, "Analyse de la question...", Toast.LENGTH_SHORT).show()
 
                         coroutineScope.launch {
-                            val aiResponse = geminiApiHelper.analyzeText(question.text)
-                            response = aiResponse
+                            response = getAIResponse(generativeModel, question)
                         }
 
-                        question = TextFieldValue("") // Réinitialiser le champ de texte
+                        question = "" // Réinitialiser le champ de texte
                     }
                 },
                 modifier = Modifier
@@ -136,5 +141,15 @@ fun AssistantScreen(geminiApiHelper: GeminiApiHelper) {
         }
 
         Spacer(modifier = Modifier.height(20.dp))
+    }
+}
+
+// 🔹 **Fonction pour interroger Gemini AI**
+private suspend fun getAIResponse(generativeModel: GenerativeModel, input: String): String {
+    return try {
+        val response = generativeModel.generateContent(input) // Vérifier cette ligne selon l'API exacte
+        response.text ?: "Aucune réponse obtenue"
+    } catch (e: Exception) {
+        "Erreur: ${e.message}"
     }
 }
