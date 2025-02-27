@@ -59,7 +59,7 @@ fun AssistantScreen(viewModel: InteractionViewModel = viewModel()) {
     val coroutineScope = rememberCoroutineScope()
 
     // Récupération de l'historique des interactions
-    //val interactionHistory by viewModel.allInteractions.collectAsState(initial = emptyList())
+    val interactionHistory by viewModel.allInteractions.collectAsState(initial = emptyList())
 
     // Modèle Gemini AI
     val generativeModel = GenerativeModel("gemini-1.5-flash", "AIzaSyBguWA9SSbLDlRrO6e5RZo3WoZkPpEl7as")
