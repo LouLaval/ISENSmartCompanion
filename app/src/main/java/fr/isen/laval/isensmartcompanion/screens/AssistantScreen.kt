@@ -47,12 +47,9 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AssistantScreen(geminiApiHelper: GeminiApiHelper, viewModel: InteractionViewModel = viewModel()) {
     var question by remember { mutableStateOf("") }
-    var lastQuestion by remember { mutableStateOf<String?>(null) }
     var response by remember { mutableStateOf<String?>(null) }
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-
-    val generativeModel = GenerativeModel("gemini-1.5-flash", "AIzaSyCR5oF0w1NqV_y6RFnJicqSj84yaGL2Eto")
 
     Column(
         modifier = Modifier
@@ -62,33 +59,15 @@ fun AssistantScreen(geminiApiHelper: GeminiApiHelper, viewModel: InteractionView
     ) {
         Spacer(modifier = Modifier.height(60.dp))
 
-        // Title
-        Text(
-            text = "ISEN",
-            fontSize = 40.sp,
-            color = Color.Red,
-            textAlign = TextAlign.Center
-        )
-        Text(
-            text = "Smart Companion",
-            fontSize = 20.sp,
-            color = Color.Gray,
-            textAlign = TextAlign.Center
-        )
+        Text(text = "ISEN", fontSize = 40.sp, color = Color.Red, textAlign = TextAlign.Center)
+        Text(text = "Smart Companion", fontSize = 20.sp, color = Color.Gray, textAlign = TextAlign.Center)
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // Response Text
         response?.let {
-            Text(
-                text = it,
-                fontSize = 16.sp,
-                color = Color.DarkGray,
-                modifier = Modifier.padding(16.dp)
-            )
+            Text(text = it, fontSize = 16.sp, color = Color.DarkGray, modifier = Modifier.padding(16.dp))
         }
 
-        // Input Field with Send Button
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -107,21 +86,18 @@ fun AssistantScreen(geminiApiHelper: GeminiApiHelper, viewModel: InteractionView
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent
                 ),
-                modifier = Modifier
-                    .weight(1f)
-                    .clip(RoundedCornerShape(16.dp))
+                modifier = Modifier.weight(1f)
             )
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            // Send Button
             IconButton(
                 onClick = {
                     if (question.isNotBlank()) {
                         Toast.makeText(context, "Analyse de la question...", Toast.LENGTH_SHORT).show()
 
                         coroutineScope.launch {
-                            response = getAIResponse(generativeModel, question)
+                            response = geminiApiHelper.analyzeText(question)
                         }
 
                         question = "" // Réinitialiser le champ de texte
@@ -132,17 +108,14 @@ fun AssistantScreen(geminiApiHelper: GeminiApiHelper, viewModel: InteractionView
                     .clip(RoundedCornerShape(50))
                     .background(Color.Red)
             ) {
-                Icon(
-                    imageVector = Icons.Filled.Send,
-                    contentDescription = "Envoyer",
-                    tint = Color.White
-                )
+                Icon(imageVector = Icons.Filled.Send, contentDescription = "Envoyer", tint = Color.White)
             }
         }
 
         Spacer(modifier = Modifier.height(20.dp))
     }
 }
+
 
 // 🔹 **Fonction pour interroger Gemini AI**
 private suspend fun getAIResponse(generativeModel: GenerativeModel, input: String): String {

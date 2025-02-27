@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 
@@ -61,17 +62,8 @@ fun EventsTopBar() {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = "ISEN",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFFB71C1C) // Rouge foncé
-                )
-                Text(
-                    text = "Smart Companion",
-                    fontSize = 16.sp,
-                    color = Color.Gray
-                )
+                Text(text = "ISEN", fontSize = 40.sp, color = Color.Red, textAlign = TextAlign.Center)
+                Text(text = "Smart Companion", fontSize = 20.sp, color = Color.Gray, textAlign = TextAlign.Center)
             }
         }
     )
