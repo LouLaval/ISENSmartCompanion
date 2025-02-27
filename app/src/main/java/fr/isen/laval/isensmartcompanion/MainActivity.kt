@@ -1,5 +1,9 @@
 package fr.isen.laval.isensmartcompanion
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -31,6 +35,7 @@ import fr.isen.laval.isensmartcompanion.ai.GeminiApiHelper
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.lifecycle.lifecycleScope
+import fr.isen.laval.isensmartcompanion.notif.NotificationReceiver
 import kotlinx.coroutines.launch
 
 
@@ -114,5 +119,17 @@ fun NavigationGraph(navController: NavHostController, geminiApiHelper: GeminiApi
             EventDetailScreen(navController, backStackEntry, eventsViewModel)
         }
     }
+}
+
+fun scheduleNotification(context: Context) {
+    val intent = Intent(context, NotificationReceiver::class.java)
+    val pendingIntent = PendingIntent.getBroadcast(
+        context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
+
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val triggerTime = System.currentTimeMillis() + 10_000 // 10 secondes plus tard
+
+    alarmManager.set(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent)
 }
 
