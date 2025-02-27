@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
@@ -26,28 +27,38 @@ import fr.isen.laval.isensmartcompanion.screens.AssistantScreen
 import fr.isen.laval.isensmartcompanion.screens.EventsViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import fr.isen.laval.isensmartcompanion.ui.theme.ISENSmartCompanionTheme
+import fr.isen.laval.isensmartcompanion.ai.GeminiApiHelper
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+
 
 
 class MainActivity : ComponentActivity() {
+    private lateinit var geminiApiHelper: GeminiApiHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        geminiApiHelper = GeminiApiHelper(this)
+
         setContent {
             ISENSmartCompanionTheme {
-                MainScreen()
+                MainScreen(geminiApiHelper) // Passer geminiApiHelper ici
             }
         }
     }
 }
 
 @Composable
-fun MainScreen() {
+fun MainScreen(geminiApiHelper: GeminiApiHelper) {
     val navController = rememberNavController()
 
     Scaffold(
         bottomBar = { BottomNavigationBar(navController) }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            NavigationGraph(navController)
+            NavigationGraph(navController, geminiApiHelper) // Passer geminiApiHelper
         }
     }
 }
@@ -87,11 +98,11 @@ sealed class Screen(val route: String, val title: String, val icon: androidx.com
 }
 
 @Composable
-fun NavigationGraph(navController: NavHostController) {
+fun NavigationGraph(navController: NavHostController, geminiApiHelper: GeminiApiHelper) {
     val eventsViewModel: EventsViewModel = viewModel()
 
     NavHost(navController, startDestination = Screen.Home.route) {
-        composable(Screen.Home.route) { AssistantScreen() }
+        composable(Screen.Home.route) { AssistantScreen(geminiApiHelper) }
         composable(Screen.Events.route) {
             EventsScreen(navController, eventsViewModel)
         }
@@ -104,3 +115,4 @@ fun NavigationGraph(navController: NavHostController) {
         }
     }
 }
+

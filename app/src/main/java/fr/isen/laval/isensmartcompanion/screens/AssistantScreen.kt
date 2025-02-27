@@ -1,4 +1,5 @@
 package fr.isen.laval.isensmartcompanion.screens
+
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -20,23 +21,34 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import fr.isen.laval.isensmartcompanion.ui.theme.ISENSmartCompanionTheme
+import fr.isen.laval.isensmartcompanion.ai.GeminiApiHelper // Import Gemini API Helper
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    private lateinit var geminiApiHelper: GeminiApiHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Initialiser GeminiApiHelper
+        geminiApiHelper = GeminiApiHelper(this)
+
+        // Passer geminiApiHelper à AssistantScreen
         setContent {
             ISENSmartCompanionTheme {
-                AssistantScreen()
+                AssistantScreen(geminiApiHelper)  // Passer l'instance ici
             }
         }
     }
 }
 
 @Composable
-fun AssistantScreen() {
+fun AssistantScreen(geminiApiHelper: GeminiApiHelper) {
     var question by remember { mutableStateOf(TextFieldValue("")) }
     var response by remember { mutableStateOf("Posez-moi une question !") }
-    val context = LocalContext.current // Permet d'afficher un Toast
+    val context = LocalContext.current
+    val geminiApiHelper = remember { GeminiApiHelper(context) } // Initialisation API
+    val coroutineScope = rememberCoroutineScope() // Pour exécuter des tâches asynchrones
 
     Column(
         modifier = Modifier
@@ -75,14 +87,14 @@ fun AssistantScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(20.dp))
-                .background(Color(0xFFE0E0E0)) // Fond gris clair pour mieux coller au design
+                .background(Color(0xFFE0E0E0))
                 .padding(4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             TextField(
                 value = question,
                 onValueChange = { question = it },
-                placeholder = { Text("Écrivez votre question...") }, // Champ vide comme sur l'image
+                placeholder = { Text("Écrivez votre question...") },
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color(0xFFE0E0E0),
                     unfocusedContainerColor = Color(0xFFE0E0E0),
@@ -96,11 +108,19 @@ fun AssistantScreen() {
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            // Send Button with Material Icon
+            // Send Button
             IconButton(
                 onClick = {
-                    Toast.makeText(context, "Question Submitted", Toast.LENGTH_SHORT).show()
-                    response = "Vous avez demandé : ${question.text}" // Change le texte de réponse
+                    if (question.text.isNotBlank()) {
+                        Toast.makeText(context, "Analyse de la question...", Toast.LENGTH_SHORT).show()
+
+                        coroutineScope.launch {
+                            val aiResponse = geminiApiHelper.analyzeText(question.text)
+                            response = aiResponse
+                        }
+
+                        question = TextFieldValue("") // Réinitialiser le champ de texte
+                    }
                 },
                 modifier = Modifier
                     .size(48.dp)
