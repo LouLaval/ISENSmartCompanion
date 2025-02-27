@@ -18,6 +18,52 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.LocationOn
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.compose.material.icons.filled.NotificationsActive
+import androidx.compose.material.icons.filled.NotificationsNone
+import android.app.Activity
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import fr.isen.laval.isensmartcompanion.R
+
+
+class EventDetailActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val eventTitle = intent.getStringExtra("event_title") ?: "Événement"
+        val eventDescription = intent.getStringExtra("event_description") ?: "Aucune description disponible"
+        val eventDate = intent.getStringExtra("event_date") ?: "Date inconnue"
+        val eventLocation = intent.getStringExtra("event_location") ?: "Lieu inconnu"
+        val eventCategory = intent.getStringExtra("event_category") ?: "Catégorie inconnue"
+
+        //setContent {
+        //    EventDetailScreen(eventTitle, eventDescription, eventDate, eventLocation, eventCategory)
+       // }
+    }
+}
 
 @Composable
 fun EventDetailScreen(navController: NavController, backStackEntry: NavBackStackEntry, eventsViewModel: EventsViewModel) {
@@ -141,4 +187,38 @@ fun EventDetailTopBar(navController: NavController) {
             )
         }
     )
+}
+
+fun sendNotification(context: Context, eventTitle: String, eventDescription: String) {
+    val channelId = "event_reminders"
+    val notificationId = eventTitle.hashCode()
+
+    // 🔹 Créer un canal de notification pour Android 8.0+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val channel = NotificationChannel(
+            channelId,
+            "Rappels d'événements",
+            NotificationManager.IMPORTANCE_DEFAULT
+        ).apply {
+            description = "Notifications pour les rappels d'événements"
+        }
+
+        val notificationManager: NotificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+
+    // 🔔 Construire la notification
+    val notification = NotificationCompat.Builder(context, channelId)
+        .setSmallIcon(R.drawable.ic_launcher_foreground)
+        .setContentTitle("Rappel : $eventTitle")
+        .setContentText(eventDescription)
+        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        .setAutoCancel(true)
+        .build()
+
+  /*  // 🔥 Envoyer la notification
+    with(NotificationManagerCompat.from(context)) {
+        notify(notificationId, notification)
+    }*/
 }

@@ -1,4 +1,4 @@
-/*
+
 package fr.isen.laval.isensmartcompanion.notif
 
 import android.app.NotificationChannel
@@ -18,36 +18,36 @@ import kotlinx.coroutines.launch
 import fr.isen.laval.isensmartcompanion.MainActivity
 import fr.isen.laval.isensmartcompanion.R
 
+
 class NotificationViewModel : ViewModel() {
 
     fun scheduleNotification(context: Context, eventTitle: String) {
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channelId = "event_reminders"
 
+        // Créer un canal de notification pour Android 8.0 (API 26) et supérieur
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 channelId,
                 "Event Notifications",
-                NotificationManager.IMPORTANCE_HIGH
-            ).apply {
-                description = "Notifications pour les rappels d'événements"
-            }
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
             notificationManager.createNotificationChannel(channel)
         }
 
         val notificationIntent = Intent(context, MainActivity::class.java)
         val pendingIntent: PendingIntent = PendingIntent.getActivity(
-            context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            context, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE
         )
+
 
         val notification = NotificationCompat.Builder(context, channelId)
             .setContentTitle("Rappel d'événement")
-            .setContentText("L'événement \"$eventTitle\" approche bientôt!")
-            .setSmallIcon(R.drawable.cloche)
+            .setContentText("L'événement \"$eventTitle\" arrive bientôt!")
+            .setSmallIcon(android.R.drawable.ic_notification_overlay)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
-            .setPriority(NotificationCompat.PRIORITY_HIGH) // ✅ Affiche une bannière
-            .setDefaults(NotificationCompat.DEFAULT_ALL) // ✅ Son + vibration + lumière
             .build()
 
         GlobalScope.launch(Dispatchers.Main) {
@@ -61,4 +61,4 @@ class NotificationViewModel : ViewModel() {
 
         }
     }
-}*/
+}
