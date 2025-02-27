@@ -1,9 +1,5 @@
 package fr.isen.laval.isensmartcompanion
 
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -23,47 +19,36 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import fr.isen.laval.isensmartcompanion.screens.EventDetailScreen
 import fr.isen.laval.isensmartcompanion.screens.EventsScreen
 import fr.isen.laval.isensmartcompanion.screens.HistoryScreen
 import fr.isen.laval.isensmartcompanion.screens.AssistantScreen
 import fr.isen.laval.isensmartcompanion.screens.EventsViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.currentBackStackEntryAsState
 import fr.isen.laval.isensmartcompanion.ui.theme.ISENSmartCompanionTheme
-import fr.isen.laval.isensmartcompanion.ai.GeminiApiHelper
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.lifecycle.lifecycleScope
-import fr.isen.laval.isensmartcompanion.notif.NotificationReceiver
-import kotlinx.coroutines.launch
-
-
 
 class MainActivity : ComponentActivity() {
-    private lateinit var geminiApiHelper: GeminiApiHelper
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        geminiApiHelper = GeminiApiHelper(this)
 
         setContent {
             ISENSmartCompanionTheme {
-                MainScreen(geminiApiHelper) // Passer geminiApiHelper ici
+                MainScreen() // Appel de MainScreen sans GeminiApiHelper
             }
         }
     }
 }
 
 @Composable
-fun MainScreen(geminiApiHelper: GeminiApiHelper) {
+fun MainScreen() {
     val navController = rememberNavController()
 
     Scaffold(
         bottomBar = { BottomNavigationBar(navController) }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            NavigationGraph(navController, geminiApiHelper) // Passer geminiApiHelper
+            NavigationGraph(navController) // Passage du navController
         }
     }
 }
@@ -103,11 +88,11 @@ sealed class Screen(val route: String, val title: String, val icon: androidx.com
 }
 
 @Composable
-fun NavigationGraph(navController: NavHostController, geminiApiHelper: GeminiApiHelper) {
+fun NavigationGraph(navController: NavHostController) {
     val eventsViewModel: EventsViewModel = viewModel()
 
     NavHost(navController, startDestination = Screen.Home.route) {
-        composable(Screen.Home.route) { AssistantScreen(geminiApiHelper) }
+        composable(Screen.Home.route) { AssistantScreen() } // Appel du composable sans GeminiApiHelper
         composable(Screen.Events.route) {
             EventsScreen(navController, eventsViewModel)
         }
@@ -120,16 +105,3 @@ fun NavigationGraph(navController: NavHostController, geminiApiHelper: GeminiApi
         }
     }
 }
-
-fun scheduleNotification(context: Context) {
-    val intent = Intent(context, NotificationReceiver::class.java)
-    val pendingIntent = PendingIntent.getBroadcast(
-        context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-    )
-
-    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    val triggerTime = System.currentTimeMillis() + 10_000 // 10 secondes plus tard
-
-    alarmManager.set(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent)
-}
-

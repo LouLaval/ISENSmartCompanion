@@ -19,14 +19,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.foundation.shape.CircleShape
 import fr.isen.laval.isensmartcompanion.ui.theme.ISENSmartCompanionTheme
 import fr.isen.laval.isensmartcompanion.ai.GeminiApiHelper
 import kotlinx.coroutines.launch
 import com.google.ai.client.generativeai.GenerativeModel
 import fr.isen.laval.isensmartcompanion.data.InteractionViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.text.font.FontWeight
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.Dispatchers
 
-class MainActivity : ComponentActivity() {
+
+/*class MainActivity : ComponentActivity() {
+
     private lateinit var geminiApiHelper: GeminiApiHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,14 +49,22 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+*/
 
 @Composable
-fun AssistantScreen(geminiApiHelper: GeminiApiHelper, viewModel: InteractionViewModel = viewModel()) {
-    var question by remember { mutableStateOf("") }
-    var response by remember { mutableStateOf<String?>(null) }
+fun AssistantScreen(viewModel: InteractionViewModel = viewModel()) {
+    var question by remember { mutableStateOf("") } // Question entrée par l'utilisateur
+    var aiResponse by remember { mutableStateOf("") } // Réponse de l'IA
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
+    // Récupération de l'historique des interactions
+    //val interactionHistory by viewModel.allInteractions.collectAsState(initial = emptyList())
+
+    // Modèle Gemini AI
+    val generativeModel = GenerativeModel("gemini-1.5-flash", "AIzaSyBguWA9SSbLDlRrO6e5RZo3WoZkPpEl7as")
+
+    Box(modifier = Modifier.fillMaxSize()) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -64,9 +78,9 @@ fun AssistantScreen(geminiApiHelper: GeminiApiHelper, viewModel: InteractionView
 
         Spacer(modifier = Modifier.weight(1f))
 
-        response?.let {
-            Text(text = it, fontSize = 16.sp, color = Color.DarkGray, modifier = Modifier.padding(16.dp))
-        }
+        //response?.let {
+         //   Text(text = it, fontSize = 16.sp, color = Color.DarkGray, modifier = Modifier.padding(16.dp))
+       // }
 
         Row(
             modifier = Modifier
@@ -93,14 +107,16 @@ fun AssistantScreen(geminiApiHelper: GeminiApiHelper, viewModel: InteractionView
 
             IconButton(
                 onClick = {
-                    if (question.isNotBlank()) {
-                        Toast.makeText(context, "Analyse de la question...", Toast.LENGTH_SHORT).show()
+                    if (question.isNotEmpty()) {
+                        // Envoyer la question à Gemini AI
+                        coroutineScope.launch(Dispatchers.IO) {
+                            aiResponse = getAIResponse(generativeModel, question)
 
-                        coroutineScope.launch {
-                            response = geminiApiHelper.analyzeText(question)
+                            // Ajouter l'interaction dans la base de données
+                            viewModel.insertInteraction(question, aiResponse)
                         }
-
-                        question = "" // Réinitialiser le champ de texte
+                    } else {
+                        Toast.makeText(context, "Veuillez entrer une question", Toast.LENGTH_SHORT).show()
                     }
                 },
                 modifier = Modifier
@@ -116,7 +132,34 @@ fun AssistantScreen(geminiApiHelper: GeminiApiHelper, viewModel: InteractionView
     }
 }
 
-
+// Affichage de la réponse actuelle (question + réponse)
+    if (aiResponse.isNotEmpty()) {
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Box(
+                modifier = Modifier
+                    .background(Color(0xFFE3F2FD), CircleShape)
+                    .padding(8.dp)
+                    .weight(1f)
+            ) {
+                Text("❓ $question", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            }
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .background(Color(0xFFFFF9C4), CircleShape)
+                    .padding(8.dp)
+                    .weight(1f)
+            ) {
+                Text("🤖 $aiResponse", fontSize = 16.sp)
+            }
+        }
+    }
+}
 // 🔹 **Fonction pour interroger Gemini AI**
 private suspend fun getAIResponse(generativeModel: GenerativeModel, input: String): String {
     return try {
