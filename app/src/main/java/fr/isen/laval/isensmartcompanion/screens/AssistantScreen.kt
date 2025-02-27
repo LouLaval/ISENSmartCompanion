@@ -52,7 +52,7 @@ fun AssistantScreen(geminiApiHelper: GeminiApiHelper, viewModel: InteractionView
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
-    val generativeModel = GenerativeModel("gemini-1.5-flash", "AIzaSyDnF7yGPomooqLkOQ77nfoXbxI0z1xjO-k")
+    val generativeModel = GenerativeModel("gemini-1.5-flash", "AIzaSyCR5oF0w1NqV_y6RFnJicqSj84yaGL2Eto")
 
     Column(
         modifier = Modifier
@@ -147,9 +147,13 @@ fun AssistantScreen(geminiApiHelper: GeminiApiHelper, viewModel: InteractionView
 // 🔹 **Fonction pour interroger Gemini AI**
 private suspend fun getAIResponse(generativeModel: GenerativeModel, input: String): String {
     return try {
-        val response = generativeModel.generateContent(input) // Vérifier cette ligne selon l'API exacte
-        response.text ?: "Aucune réponse obtenue"
+        println("🔍 Question envoyée : $input") // Vérifier ce qui est envoyé
+        val response = generativeModel.generateContent(input).text
+        println("📝 Réponse brute reçue : $response") // Voir la réponse complète
+
+        response ?: "Aucune réponse obtenue"
     } catch (e: Exception) {
         "Erreur: ${e.message}"
     }
 }
+
