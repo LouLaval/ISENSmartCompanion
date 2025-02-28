@@ -11,10 +11,8 @@ import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -24,7 +22,7 @@ import fr.isen.laval.isensmartcompanion.screens.EventDetailScreen
 import fr.isen.laval.isensmartcompanion.screens.EventsScreen
 import fr.isen.laval.isensmartcompanion.screens.HistoryScreen
 import fr.isen.laval.isensmartcompanion.screens.AssistantScreen
-import fr.isen.laval.isensmartcompanion.screens.AgendaScreen
+import fr.isen.laval.isensmartcompanion.screens.AgendaScreenContent
 import fr.isen.laval.isensmartcompanion.screens.EventsViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -33,7 +31,6 @@ import fr.isen.laval.isensmartcompanion.ui.theme.ISENSmartCompanionTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
             ISENSmartCompanionTheme {
                 MainScreen()
@@ -50,7 +47,7 @@ fun MainScreen() {
         bottomBar = { BottomNavigationBar(navController) }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            NavigationGraph(navController) // Passage du navController
+            NavigationGraph(navController)
         }
     }
 }
@@ -89,7 +86,6 @@ sealed class Screen(val route: String, val title: String, val icon: androidx.com
     object Events : Screen("events", "Events", Icons.Filled.Event)
     object History : Screen("history", "History", Icons.Filled.History)
     object Agenda : Screen("agenda", "Agenda", Icons.Filled.CalendarToday)
-
 }
 
 @Composable
@@ -102,12 +98,9 @@ fun NavigationGraph(navController: NavHostController) {
             EventsScreen(navController, eventsViewModel)
         }
         composable(Screen.History.route) { HistoryScreen() }
-
         composable(Screen.Agenda.route) {
-            AgendaScreen() // Assure-toi que AgendaScreen est correctement défini dans ton projet
+            AgendaScreenContent()  // Correction : on appelle directement la fonction composable
         }
-
-
         composable("eventDetail/{eventId}") { backStackEntry ->
             val eventId = backStackEntry.arguments?.getString("eventId")
             EventDetailScreen(navController, backStackEntry, eventsViewModel)

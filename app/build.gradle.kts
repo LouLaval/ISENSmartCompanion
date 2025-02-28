@@ -39,6 +39,9 @@ android {
         compose = true
         buildConfig = true
     }
+
+    composeOptions {    kotlinCompilerExtensionVersion = "1.5.0" // Mets à jour selon ta version
+    }
 }
 
 dependencies {
@@ -59,6 +62,32 @@ dependencies {
     implementation ("com.google.code.gson:gson:2.8.8")
 
     implementation("com.google.ai.client.generativeai:generativeai:0.6.0")
+
+    implementation ("androidx.compose.ui:ui:1.4.0")
+    implementation ("androidx.compose.material3:material3:1.0.0")
+    implementation ("androidx.compose.ui:ui-tooling-preview:1.4.0")
+    implementation ("androidx.activity:activity-compose:1.6.0")
+    implementation ("androidx.compose.foundation:foundation:1.4.0")
+
+    // Bill of Materials (BOM) pour Compose
+    implementation(platform("androidx.compose:compose-bom:1.4.3"))
+
+    // UI et autres dépendances Compose
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.foundation:foundation")
+
+    // Activity Compose
+    implementation("androidx.activity:activity-compose:1.6.0")
+
+    // Navigation Compose
+    implementation("androidx.navigation:navigation-compose:2.7.5")
+
+    // Testing
+    debugImplementation("androidx.compose.ui:ui-tooling")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+
 
     val room_version = "2.6.1"
 
