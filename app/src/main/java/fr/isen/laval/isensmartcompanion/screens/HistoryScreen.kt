@@ -24,7 +24,7 @@ fun HistoryScreen(viewModel: InteractionViewModel = viewModel()) {
     val interactionHistory by viewModel.allInteractions.collectAsState(initial = emptyList())
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text(text = " Historique ", fontSize = 24.sp)
+        Text(text = "Historique", fontSize = 24.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(16.dp))
 
         LazyColumn {
@@ -35,18 +35,15 @@ fun HistoryScreen(viewModel: InteractionViewModel = viewModel()) {
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text("📅 ${formatDate(interaction.date)}", fontSize = 14.sp, color = Color.Gray)
-                        Text("❓ ${interaction.question}", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                        Text("🤖 ${interaction.answer}", fontSize = 16.sp)
-
-
-
+                        Text("❓ Question : ${interaction.question}", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Blue)
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text("🤖 Réponse : ${interaction.answer}", fontSize = 16.sp, color = Color.Black)
                     }
                 }
             }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-
 
         Button(
             onClick = {
@@ -61,6 +58,7 @@ fun HistoryScreen(viewModel: InteractionViewModel = viewModel()) {
         }
     }
 }
+
 
 
 fun formatDate(timestamp: Long): String {

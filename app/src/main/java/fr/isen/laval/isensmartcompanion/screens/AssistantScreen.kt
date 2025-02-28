@@ -104,15 +104,17 @@ fun AssistantScreen(viewModel: InteractionViewModel = viewModel()) {
                 IconButton(
                     onClick = {
                         if (question.isNotEmpty()) {
+                            val userQuestion = question // 🔹 Sauvegarde la question avant de la vider
+
                             coroutineScope.launch(Dispatchers.IO) {
-                                val response = getAIResponse(generativeModel, question)
+                                val response = getAIResponse(generativeModel, userQuestion)
 
                                 withContext(Dispatchers.Main) {
                                     aiResponse = response
-                                    question = "" // Efface la question après la réponse
+                                    question = "" // Efface la zone de texte après l'envoi
                                 }
 
-                                viewModel.insertInteraction(question, aiResponse)
+                                viewModel.insertInteraction(userQuestion, response) // 🔹 Sauvegarde la question et la réponse
                             }
                         } else {
                             Toast.makeText(context, "Veuillez entrer une question", Toast.LENGTH_SHORT).show()
@@ -125,6 +127,7 @@ fun AssistantScreen(viewModel: InteractionViewModel = viewModel()) {
                 ) {
                     Icon(imageVector = Icons.Filled.Send, contentDescription = "Envoyer", tint = Color.White)
                 }
+
             }
 
             Spacer(modifier = Modifier.height(20.dp))
