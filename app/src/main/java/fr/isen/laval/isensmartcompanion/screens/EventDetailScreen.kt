@@ -46,9 +46,13 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import fr.isen.laval.isensmartcompanion.R
+import fr.isen.laval.isensmartcompanion.notif.NotificationViewModel
+
 
 
 class EventDetailActivity : ComponentActivity() {
@@ -66,9 +70,15 @@ class EventDetailActivity : ComponentActivity() {
 }
 
 @Composable
-fun EventDetailScreen(navController: NavController, backStackEntry: NavBackStackEntry, eventsViewModel: EventsViewModel) {
+fun EventDetailScreen(
+    navController: NavController,
+    backStackEntry: NavBackStackEntry,
+    eventsViewModel: EventsViewModel,
+    notificationViewModel: NotificationViewModel = viewModel() // Ajoute NotificationViewModel ici
+) {
     val eventId = backStackEntry.arguments?.getString("eventId")
     val event = eventsViewModel.events.find { it.id.toString() == eventId }
+    val context = LocalContext.current
 
     Scaffold(
         topBar = { EventDetailTopBar(navController) }
@@ -88,14 +98,14 @@ fun EventDetailScreen(navController: NavController, backStackEntry: NavBackStack
                     color = Color(0xFF9E9E9E), // Couleur grise claire
                 )
             } else {
-                EventDetailContent(event)
+                EventDetailContent(event, notificationViewModel, context) // Passe NotificationViewModel
             }
         }
     }
 }
 
 @Composable
-fun EventDetailContent(event: Event) {
+fun EventDetailContent(event: Event, notificationViewModel: NotificationViewModel, context: Context) {
     Spacer(modifier = Modifier.height(12.dp)) // Espacement plus léger
 
     // Titre de l'événement
@@ -134,6 +144,21 @@ fun EventDetailContent(event: Event) {
                 color = Color(0xFF616161), // Texte dans une couleur un peu plus douce
                 lineHeight = 24.sp // Pour aérer le texte
             )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Bouton pour activer les notifications
+            Button(
+                onClick = { notificationViewModel.sendNotification(context, event.title, event.description) },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
+            ) {
+                Text(
+                    text = "Activer les notifications",
+                    color = Color.White,
+                    fontSize = 16.sp
+                )
+            }
         }
     }
 }
