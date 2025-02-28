@@ -59,18 +59,15 @@ class EventDetailActivity : ComponentActivity() {
         val eventLocation = intent.getStringExtra("event_location") ?: "Lieu inconnu"
         val eventCategory = intent.getStringExtra("event_category") ?: "Catégorie inconnue"
 
-        //setContent {
-        //    EventDetailScreen(eventTitle, eventDescription, eventDate, eventLocation, eventCategory)
-       // }
+
     }
 }
 
 @Composable
 fun EventDetailScreen(navController: NavController, backStackEntry: NavBackStackEntry, eventsViewModel: EventsViewModel) {
-    // Récupérer l'ID de l'événement depuis les arguments de la navigation
+
     val eventId = backStackEntry.arguments?.getString("eventId")
 
-    // Trouver l'événement dans le ViewModel avec l'ID en tant que String
     val event = eventsViewModel.events.find { it.id.toString() == eventId }
 
     Scaffold(
@@ -102,7 +99,7 @@ fun EventDetailScreen(navController: NavController, backStackEntry: NavBackStack
 fun EventDetailContent(event: Event) {
     Spacer(modifier = Modifier.height(16.dp))
 
-    // Titre de l'événement
+
     Text(
         text = event.title,
         fontSize = 26.sp,
@@ -112,7 +109,7 @@ fun EventDetailContent(event: Event) {
 
     Spacer(modifier = Modifier.height(16.dp))
 
-    // Carte contenant les détails de l'événement
+
     Card(
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(6.dp),
@@ -193,7 +190,7 @@ fun sendNotification(context: Context, eventTitle: String, eventDescription: Str
     val channelId = "event_reminders"
     val notificationId = eventTitle.hashCode()
 
-    // 🔹 Créer un canal de notification pour Android 8.0+
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val channel = NotificationChannel(
             channelId,
@@ -208,7 +205,7 @@ fun sendNotification(context: Context, eventTitle: String, eventDescription: Str
         notificationManager.createNotificationChannel(channel)
     }
 
-    // 🔔 Construire la notification
+
     val notification = NotificationCompat.Builder(context, channelId)
         .setSmallIcon(R.drawable.ic_launcher_foreground)
         .setContentTitle("Rappel : $eventTitle")

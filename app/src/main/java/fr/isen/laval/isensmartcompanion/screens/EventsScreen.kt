@@ -90,7 +90,7 @@ fun EventItem(event: Event, navController: NavController) {
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Affichage du titre de l'événement
+
             Text(
                 text = event.title,
                 fontSize = 22.sp,

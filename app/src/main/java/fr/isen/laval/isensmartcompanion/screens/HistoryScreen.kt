@@ -24,10 +24,9 @@ fun HistoryScreen(viewModel: InteractionViewModel = viewModel()) {
     val interactionHistory by viewModel.allInteractions.collectAsState(initial = emptyList())
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text(text = "📜 Historique des questions", fontSize = 24.sp)
+        Text(text = " Historique ", fontSize = 24.sp)
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Liste des interactions
         LazyColumn {
             items(interactionHistory) { interaction ->
                 Card(
@@ -48,11 +47,11 @@ fun HistoryScreen(viewModel: InteractionViewModel = viewModel()) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Bouton pour supprimer tout l'historique
+
         Button(
             onClick = {
                 coroutineScope.launch {
-                    viewModel.deleteAllInteractions() // Supprime tout l'historique
+                    viewModel.deleteAllInteractions()
                 }
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
@@ -63,7 +62,7 @@ fun HistoryScreen(viewModel: InteractionViewModel = viewModel()) {
     }
 }
 
-// Fonction pour convertir le timestamp en date lisible
+
 fun formatDate(timestamp: Long): String {
     val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
     return sdf.format(Date(timestamp))

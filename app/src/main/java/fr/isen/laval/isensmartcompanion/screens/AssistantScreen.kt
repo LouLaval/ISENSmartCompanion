@@ -58,10 +58,8 @@ fun AssistantScreen(viewModel: InteractionViewModel = viewModel()) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
-    // Récupération de l'historique des interactions
     val interactionHistory by viewModel.allInteractions.collectAsState(initial = emptyList())
 
-    // Modèle Gemini AI
     val generativeModel = GenerativeModel("gemini-1.5-flash", "AIzaSyBguWA9SSbLDlRrO6e5RZo3WoZkPpEl7as")
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -78,9 +76,6 @@ fun AssistantScreen(viewModel: InteractionViewModel = viewModel()) {
 
         Spacer(modifier = Modifier.weight(1f))
 
-        //response?.let {
-         //   Text(text = it, fontSize = 16.sp, color = Color.DarkGray, modifier = Modifier.padding(16.dp))
-       // }
 
         Row(
             modifier = Modifier
@@ -108,11 +103,9 @@ fun AssistantScreen(viewModel: InteractionViewModel = viewModel()) {
             IconButton(
                 onClick = {
                     if (question.isNotEmpty()) {
-                        // Envoyer la question à Gemini AI
                         coroutineScope.launch(Dispatchers.IO) {
                             aiResponse = getAIResponse(generativeModel, question)
 
-                            // Ajouter l'interaction dans la base de données
                             viewModel.insertInteraction(question, aiResponse)
                         }
                     } else {
@@ -132,7 +125,7 @@ fun AssistantScreen(viewModel: InteractionViewModel = viewModel()) {
     }
 }
 
-// Affichage de la réponse actuelle (question + réponse)
+
     if (aiResponse.isNotEmpty()) {
         Row(
             modifier = Modifier.fillMaxWidth()
@@ -160,12 +153,12 @@ fun AssistantScreen(viewModel: InteractionViewModel = viewModel()) {
         }
     }
 }
-// 🔹 **Fonction pour interroger Gemini AI**
+
 private suspend fun getAIResponse(generativeModel: GenerativeModel, input: String): String {
     return try {
-        println("🔍 Question envoyée : $input") // Vérifier ce qui est envoyé
+        println("🔍 Question envoyée : $input")
         val response = generativeModel.generateContent(input).text
-        println("📝 Réponse brute reçue : $response") // Voir la réponse complète
+        println("📝 Réponse brute reçue : $response")
 
         response ?: "Aucune réponse obtenue"
     } catch (e: Exception) {

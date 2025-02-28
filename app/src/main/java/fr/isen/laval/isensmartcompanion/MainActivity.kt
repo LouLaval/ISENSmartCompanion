@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             ISENSmartCompanionTheme {
-                MainScreen() // Appel de MainScreen sans GeminiApiHelper
+                MainScreen()
             }
         }
     }
@@ -92,13 +92,13 @@ fun NavigationGraph(navController: NavHostController) {
     val eventsViewModel: EventsViewModel = viewModel()
 
     NavHost(navController, startDestination = Screen.Home.route) {
-        composable(Screen.Home.route) { AssistantScreen() } // Appel du composable sans GeminiApiHelper
+        composable(Screen.Home.route) { AssistantScreen() }
         composable(Screen.Events.route) {
             EventsScreen(navController, eventsViewModel)
         }
         composable(Screen.History.route) { HistoryScreen() }
 
-        // Page de détails d'un événement
+
         composable("eventDetail/{eventId}") { backStackEntry ->
             val eventId = backStackEntry.arguments?.getString("eventId")
             EventDetailScreen(navController, backStackEntry, eventsViewModel)

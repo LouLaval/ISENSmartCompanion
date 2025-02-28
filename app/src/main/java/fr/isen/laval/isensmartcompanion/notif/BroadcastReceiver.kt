@@ -15,7 +15,7 @@ class NotificationReceiver : BroadcastReceiver() {
         val notificationManager =
             context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        // Si Android 8 ou plus, créer un channel
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 channelId,
