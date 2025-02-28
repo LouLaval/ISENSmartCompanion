@@ -3,10 +3,9 @@ package fr.isen.laval.isensmartcompanion.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -17,33 +16,61 @@ import java.text.SimpleDateFormat
 import java.util.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 
 @Composable
 fun HistoryScreen(viewModel: InteractionViewModel = viewModel()) {
     val coroutineScope = rememberCoroutineScope()
     val interactionHistory by viewModel.allInteractions.collectAsState(initial = emptyList())
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text(text = "Historique", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-        Spacer(modifier = Modifier.height(16.dp))
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Historique",
+            fontSize = 22.sp,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.padding(bottom = 12.dp)
+        )
 
-        LazyColumn {
+        LazyColumn(modifier = Modifier.weight(1f)) {
             items(interactionHistory) { interaction ->
                 Card(
-                    modifier = Modifier.fillMaxWidth().padding(8.dp),
-                    elevation = CardDefaults.cardElevation(4.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 6.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5))
                 ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text("📅 ${formatDate(interaction.date)}", fontSize = 14.sp, color = Color.Gray)
-                        Text("❓ Question : ${interaction.question}", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Blue)
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text("🤖 Réponse : ${interaction.answer}", fontSize = 16.sp, color = Color.Black)
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(formatDate(interaction.date), fontSize = 12.sp, color = Color.Gray)
+                            Text(interaction.question, fontSize = 16.sp, fontWeight = FontWeight.Medium, color = Color.Black)
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(interaction.answer, fontSize = 14.sp, color = Color.DarkGray)
+                        }
+                        IconButton(onClick = {
+                            coroutineScope.launch {
+                                viewModel.deleteInteraction(interaction)
+                            }
+                        }) {
+                            Icon(Icons.Filled.Delete, contentDescription = "Supprimer", tint = Color.Red)
+                        }
                     }
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         Button(
             onClick = {
@@ -51,15 +78,16 @@ fun HistoryScreen(viewModel: InteractionViewModel = viewModel()) {
                     viewModel.deleteAllInteractions()
                 }
             },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
-            modifier = Modifier.fillMaxWidth()
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE57373)),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            shape = MaterialTheme.shapes.medium
         ) {
-            Text("Effacer tout l'historique", color = Color.White)
+            Text("🗑 Effacer l'historique", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Medium)
         }
     }
 }
-
-
 
 fun formatDate(timestamp: Long): String {
     val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
