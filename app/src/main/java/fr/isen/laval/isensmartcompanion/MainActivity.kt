@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
@@ -23,6 +24,7 @@ import fr.isen.laval.isensmartcompanion.screens.EventDetailScreen
 import fr.isen.laval.isensmartcompanion.screens.EventsScreen
 import fr.isen.laval.isensmartcompanion.screens.HistoryScreen
 import fr.isen.laval.isensmartcompanion.screens.AssistantScreen
+import fr.isen.laval.isensmartcompanion.screens.AgendaScreen
 import fr.isen.laval.isensmartcompanion.screens.EventsViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -58,7 +60,8 @@ fun BottomNavigationBar(navController: NavHostController) {
     val items = listOf(
         Screen.Home,
         Screen.Events,
-        Screen.History
+        Screen.History,
+        Screen.Agenda
     )
 
     NavigationBar(containerColor = Color.White) {
@@ -85,6 +88,8 @@ sealed class Screen(val route: String, val title: String, val icon: androidx.com
     object Home : Screen("home", "Home", Icons.Filled.Home)
     object Events : Screen("events", "Events", Icons.Filled.Event)
     object History : Screen("history", "History", Icons.Filled.History)
+    object Agenda : Screen("agenda", "Agenda", Icons.Filled.CalendarToday)
+
 }
 
 @Composable
@@ -97,6 +102,10 @@ fun NavigationGraph(navController: NavHostController) {
             EventsScreen(navController, eventsViewModel)
         }
         composable(Screen.History.route) { HistoryScreen() }
+
+        composable(Screen.Agenda.route) {
+            AgendaScreen() // Assure-toi que AgendaScreen est correctement défini dans ton projet
+        }
 
 
         composable("eventDetail/{eventId}") { backStackEntry ->
