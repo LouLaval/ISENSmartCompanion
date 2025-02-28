@@ -71,6 +71,8 @@ dependencies {
     implementation("com.google.ai.client.generativeai:generativeai:0.6.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
+    implementation("com.kizitonwose.calendar:compose:2.4.0")
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
