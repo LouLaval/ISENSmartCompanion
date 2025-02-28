@@ -102,6 +102,9 @@ dependencies {
 
     implementation("com.kizitonwose.calendar:compose:2.4.0")
 
+    implementation ("androidx.datastore:datastore-preferences:1.0.0")
+    implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -84,7 +84,7 @@ fun AgendaScreenContent() {
         Spacer(modifier = Modifier.height(16.dp))
 
         // Encadré affichant les événements pour la date sélectionnée
-        if (events[selectedDate] != null) {
+        if (events[selectedDate] != null && events[selectedDate]!!.isNotEmpty()) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()

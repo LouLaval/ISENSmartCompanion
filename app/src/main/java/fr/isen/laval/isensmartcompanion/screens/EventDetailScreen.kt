@@ -154,7 +154,7 @@ fun EventDetailContent(event: Event, notificationViewModel: NotificationViewMode
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
             ) {
                 Text(
-                    text = "Activer les notifications",
+                    text = "🔔Activer un notification 🔔",
                     color = Color.White,
                     fontSize = 16.sp
                 )
