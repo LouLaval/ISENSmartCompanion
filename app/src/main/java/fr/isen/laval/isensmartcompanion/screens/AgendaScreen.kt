@@ -82,7 +82,7 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
                     setOnDateChangeListener { _, year, month, dayOfMonth ->
                         val calendar = Calendar.getInstance()
                         calendar.set(year, month, dayOfMonth)
-                        val dateFormat = SimpleDateFormat("dd MMMM பிரபு", Locale("fr", "FR"))
+                        val dateFormat = SimpleDateFormat("dd MMMM yyyy", Locale("fr", "FR"))
                         selectedDate = dateFormat.format(calendar.time)
                         println("Date sélectionnée : $selectedDate")
                     }
@@ -130,7 +130,7 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(vertical = 6.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                                verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.LocationOn,
