@@ -63,7 +63,7 @@ fun HistoryScreen(viewModel: InteractionViewModel = viewModel()) {
                                 viewModel.deleteInteraction(interaction)
                             }
                         }) {
-                            Icon(Icons.Filled.Delete, contentDescription = "Supprimer", tint = Color.Red)
+                            Icon(Icons.Filled.Delete, contentDescription = "Supprimer", tint = Color.Black)
                         }
                     }
                 }

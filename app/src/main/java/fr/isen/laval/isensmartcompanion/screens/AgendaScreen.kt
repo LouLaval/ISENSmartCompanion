@@ -141,6 +141,7 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
                                     modifier = Modifier.size(25.dp)
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
+
                                 Column {
                                     Text(
                                         text = event.first,
