@@ -3,7 +3,6 @@ package fr.isen.laval.isensmartcompanion.screens
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
-import fr.isen.laval.isensmartcompanion.screens.Event
 import fr.isen.laval.isensmartcompanion.network.RetrofitInstance
 import retrofit2.Call
 import retrofit2.Callback

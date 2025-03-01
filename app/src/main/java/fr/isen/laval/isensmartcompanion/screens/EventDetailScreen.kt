@@ -1,6 +1,6 @@
 package fr.isen.laval.isensmartcompanion.screens
 
-import androidx.compose.foundation.layout.*
+
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -11,25 +11,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
-import fr.isen.laval.isensmartcompanion.screens.Event
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
-import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.LocationOn
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.compose.material.icons.filled.NotificationsActive
-import androidx.compose.material.icons.filled.NotificationsNone
-import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -39,7 +31,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Label
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -48,7 +39,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import fr.isen.laval.isensmartcompanion.R
 import fr.isen.laval.isensmartcompanion.notif.NotificationViewModel
@@ -237,8 +227,4 @@ fun sendNotification(context: Context, eventTitle: String, eventDescription: Str
         .setAutoCancel(true)
         .build()
 
-  /*  // 🔥 Envoyer la notification
-    with(NotificationManagerCompat.from(context)) {
-        notify(notificationId, notification)
-    }*/
 }

@@ -3,7 +3,6 @@ package fr.isen.laval.isensmartcompanion
 import android.content.Context
 import java.io.FileInputStream
 import java.util.Properties
-import fr.isen.laval.isensmartcompanion.getApiKey
 
 
 fun getApiKey(context: Context): String {

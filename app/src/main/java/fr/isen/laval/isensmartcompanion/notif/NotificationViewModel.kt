@@ -11,13 +11,11 @@ import androidx.lifecycle.ViewModel
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import fr.isen.laval.isensmartcompanion.MainActivity
-import fr.isen.laval.isensmartcompanion.R
 
 
 class NotificationViewModel : ViewModel() {
