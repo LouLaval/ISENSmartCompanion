@@ -219,13 +219,15 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
                             eventName = ""
                             eventLocation = ""
                             showDialog = false
-                        }
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF26A69A))
                     ) {
                         Text("Ajouter")
                     }
                 },
                 dismissButton = {
-                    TextButton(onClick = { showDialog = false }) {
+                    TextButton(onClick = { showDialog = false },
+                    colors = ButtonDefaults.textButtonColors(contentColor = Color(0xFF26A69A))){
                         Text("Annuler")
                     }
                 }
