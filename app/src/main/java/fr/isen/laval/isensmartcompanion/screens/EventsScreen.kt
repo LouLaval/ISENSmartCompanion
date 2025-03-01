@@ -95,7 +95,9 @@ fun EventItem(event: Event, navController: NavController) {
                 text = event.title,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF212121)
+                color = Color(0xFF212121),
+                textAlign = TextAlign.Center, // Assurer un centrage horizontal du texte
+                modifier = Modifier.fillMaxWidth() // Prendre toute la largeur disponible
             )
         }
     }
