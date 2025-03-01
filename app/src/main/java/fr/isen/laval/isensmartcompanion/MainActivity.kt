@@ -26,28 +26,32 @@ import fr.isen.laval.isensmartcompanion.screens.AgendaScreenContent
 import fr.isen.laval.isensmartcompanion.screens.EventsViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
+import fr.isen.laval.isensmartcompanion.data.DataStoreManager
 import fr.isen.laval.isensmartcompanion.ui.theme.ISENSmartCompanionTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val dataStoreManager = DataStoreManager(applicationContext)
+
         setContent {
             ISENSmartCompanionTheme {
-                MainScreen()
+                MainScreen(dataStoreManager)
             }
         }
     }
 }
 
 @Composable
-fun MainScreen() {
+fun MainScreen(dataStoreManager: DataStoreManager) {
     val navController = rememberNavController()
 
     Scaffold(
         bottomBar = { BottomNavigationBar(navController) }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            NavigationGraph(navController)
+            NavigationGraph(navController, dataStoreManager)
         }
     }
 }
@@ -89,7 +93,7 @@ sealed class Screen(val route: String, val title: String, val icon: androidx.com
 }
 
 @Composable
-fun NavigationGraph(navController: NavHostController) {
+fun NavigationGraph(navController: NavHostController, dataStoreManager: DataStoreManager) {
     val eventsViewModel: EventsViewModel = viewModel()
 
     NavHost(navController, startDestination = Screen.Home.route) {
@@ -99,7 +103,7 @@ fun NavigationGraph(navController: NavHostController) {
         }
         composable(Screen.History.route) { HistoryScreen() }
         composable(Screen.Agenda.route) {
-            AgendaScreenContent()  // Correction : on appelle directement la fonction composable
+            AgendaScreenContent(dataStoreManager)  // Passer DataStoreManager ici
         }
         composable("eventDetail/{eventId}") { backStackEntry ->
             val eventId = backStackEntry.arguments?.getString("eventId")
