@@ -9,11 +9,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -84,37 +87,63 @@ fun AgendaScreenContent() {
         Spacer(modifier = Modifier.height(16.dp))
 
         // Encadré affichant les événements pour la date sélectionnée
-        if (events[selectedDate] != null && events[selectedDate]!!.isNotEmpty()) {
+        if (events[selectedDate]?.isNotEmpty() == true) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
-                shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFE3F2FD))
+                    .padding(12.dp),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)), // Gris clair minimaliste
+                elevation = CardDefaults.cardElevation(4.dp)
             ) {
-                Column(modifier = Modifier.padding(16.dp)) {
+                Column(modifier = Modifier.padding(25.dp)) {
                     Text(
                         text = "📅 Événements du $selectedDate",
                         style = MaterialTheme.typography.titleMedium,
-                        color = Color.Black
+                        color = Color(0xFF37474F), // Gris foncé élégant
+                        fontWeight = FontWeight.Bold
                     )
+
+                    Spacer(modifier = Modifier.height(8.dp))
 
                     LazyColumn {
                         items(events[selectedDate] ?: emptyList()) { event ->
-                            Text(
-                                text = "🔹 ${event.first} " +
-                                        "📍localisation : ${event.second}",
-                                style = MaterialTheme.typography.bodyMedium,
-                                modifier = Modifier.padding(top = 8.dp)
-                            )
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 6.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.LocationOn,
+                                    contentDescription = "Localisation",
+                                    tint = Color(0xFF26A69A), // Vert doux
+                                    modifier = Modifier.size(25.dp)
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Column {
+                                    Text(
+                                        text = event.first,
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        fontWeight = FontWeight.Medium,
+                                        color = Color(0xFF212121)
+                                    )
+                                    Text(
+                                        text = "${event.second}",
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        fontWeight = FontWeight.Medium,
+                                        color = Color(0xFF616161)
+                                    )
+                                }
+                            }
                         }
                     }
                 }
             }
         }
-    }
 
-    // Dialog pour entrer un événement
+
+        // Dialog pour entrer un événement
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
@@ -162,9 +191,10 @@ fun AgendaScreenContent() {
         )
     }
 }
-
+/*
 @Preview(showBackground = true)
 @Composable
 fun PreviewAgendaScreen() {
     AgendaScreenContent()
+}*/
 }
