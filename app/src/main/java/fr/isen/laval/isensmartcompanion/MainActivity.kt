@@ -82,9 +82,9 @@ fun BottomNavigationBar(navController: NavHostController) {
 }
 
 sealed class Screen(val route: String, val title: String, val icon: androidx.compose.ui.graphics.vector.ImageVector) {
-    object Home : Screen("home", "Home", Icons.Filled.Home)
-    object Events : Screen("events", "Events", Icons.Filled.Event)
-    object History : Screen("history", "History", Icons.Filled.History)
+    object Home : Screen("home", "Accueil", Icons.Filled.Home)
+    object Events : Screen("events", "Evènements", Icons.Filled.Event)
+    object History : Screen("history", "Historique", Icons.Filled.History)
     object Agenda : Screen("agenda", "Agenda", Icons.Filled.CalendarToday)
 }
 

@@ -74,7 +74,7 @@ fun EventDetailScreen(
     navController: NavController,
     backStackEntry: NavBackStackEntry,
     eventsViewModel: EventsViewModel,
-    notificationViewModel: NotificationViewModel = viewModel() // Ajoute NotificationViewModel ici
+    notificationViewModel: NotificationViewModel = viewModel()
 ) {
     val eventId = backStackEntry.arguments?.getString("eventId")
     val event = eventsViewModel.events.find { it.id.toString() == eventId }
@@ -87,7 +87,7 @@ fun EventDetailScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(20.dp), // Padding général réduit pour une aération plus grande
+                .padding(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (event == null) {
@@ -95,10 +95,10 @@ fun EventDetailScreen(
                     text = "Événement introuvable",
                     fontSize = 22.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = Color(0xFF9E9E9E), // Couleur grise claire
+                    color = Color.Gray
                 )
             } else {
-                EventDetailContent(event, notificationViewModel, context) // Passe NotificationViewModel
+                EventDetailContent(event, notificationViewModel, context)
             }
         }
     }
@@ -106,55 +106,49 @@ fun EventDetailScreen(
 
 @Composable
 fun EventDetailContent(event: Event, notificationViewModel: NotificationViewModel, context: Context) {
-    Spacer(modifier = Modifier.height(12.dp)) // Espacement plus léger
+    Spacer(modifier = Modifier.height(12.dp))
 
-    // Titre de l'événement
     Text(
         text = event.title,
-        fontSize = 30.sp,
-        fontWeight = FontWeight.ExtraBold,
-        color = Color(0xFF212121)
+        fontSize = 28.sp,
+        fontWeight = FontWeight.Bold,
+        color = Color(0xFF37474F)
     )
 
     Spacer(modifier = Modifier.height(16.dp))
 
-    // Card contenant les informations sur l'événement
     Card(
-        shape = RoundedCornerShape(20.dp), // Coins plus arrondis pour un effet plus doux
-        elevation = CardDefaults.cardElevation(12.dp), // Légère élévation
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(8.dp),
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFF1F1F1)) // Fond très clair
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFF8F9FA))
     ) {
         Column(
-            modifier = Modifier.padding(24.dp), // Plus de padding pour aérer le contenu
+            modifier = Modifier.padding(20.dp),
             horizontalAlignment = Alignment.Start
         ) {
-            // Affichage des informations détaillées
             DetailItem(label = "Date", value = event.date, icon = Icons.Default.CalendarToday)
             DetailItem(label = "Lieu", value = event.location, icon = Icons.Default.LocationOn)
-            // Nouveau changement d'emoji pour catégorie
             DetailItem(label = "Catégorie", value = event.category, icon = Icons.Default.Label)
 
-            Spacer(modifier = Modifier.height(24.dp)) // Espacement pour séparer la description
+            Spacer(modifier = Modifier.height(16.dp))
 
-            // Description de l'événement avec une taille plus grande et plus aérée
             Text(
                 text = event.description,
-                fontSize = 18.sp,
-                color = Color(0xFF616161), // Texte dans une couleur un peu plus douce
-                lineHeight = 24.sp // Pour aérer le texte
+                fontSize = 16.sp,
+                color = Color(0xFF546E7A),
+                lineHeight = 22.sp
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Bouton pour activer les notifications
             Button(
                 onClick = { notificationViewModel.sendNotification(context, event.title, event.description) },
                 modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6D9886))
             ) {
                 Text(
-                    text = "🔔Activer un notification 🔔",
+                    text = "🔔 Activer un rappel",
                     color = Color.White,
                     fontSize = 16.sp
                 )
@@ -168,30 +162,27 @@ fun DetailItem(label: String, value: String, icon: androidx.compose.ui.graphics.
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 10.dp), // Plus d'espace entre les éléments
+            .padding(vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
             imageVector = icon,
             contentDescription = label,
-            tint = Color(0xFF4CAF50), // Icônes en couleur verte pour plus de contraste
-            modifier = Modifier.size(24.dp) // Icônes légèrement plus grandes
+            tint = Color(0xFF6D9886),
+            modifier = Modifier.size(24.dp)
         )
         Spacer(modifier = Modifier.width(12.dp))
-
-        Column(
-            verticalArrangement = Arrangement.Center
-        ) {
+        Column {
             Text(
                 text = label,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF757575) // Couleur des labels plus douce
+                color = Color(0xFF525252)
             )
             Text(
                 text = value,
                 fontSize = 16.sp,
-                color = Color(0xFF424242) // Texte de la valeur en gris foncé
+                color = Color(0xFF2E2E2E)
             )
         }
     }
@@ -203,18 +194,18 @@ fun EventDetailTopBar(navController: NavController) {
     TopAppBar(
         navigationIcon = {
             IconButton(onClick = { navController.popBackStack() }) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Retour")
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Retour")
             }
         },
         title = {
             Text(
                 text = "Détails de l'événement",
-                fontSize = 22.sp,
+                fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF212121) // Couleur du titre dans un gris foncé
+                color = Color(0xFF2E2E2E)
             )
         },
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFFFAFAFA)) // Fond plus léger
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFFB0BEC5))
     )
 }
 
