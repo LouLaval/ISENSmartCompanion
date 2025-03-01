@@ -156,6 +156,7 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
                                     )
                                 }
                             }
+                            Spacer(modifier = Modifier.weight(1f))
                             IconButton(onClick = {
                                 events[selectedDate]?.removeAt(index)
                                 coroutineScope.launch {
