@@ -44,6 +44,9 @@ class NotificationViewModel : ViewModel() {
     fun sendNotification(context: Context, eventTitle: String, eventDescription: String) {
         createNotificationChannel(context)
 
+        viewModelScope.launch(Dispatchers.Main) {
+            delay(10000); // Délai de 10 secondes
+
         val notificationIntent = Intent(context, MainActivity::class.java)
         val pendingIntent: PendingIntent = PendingIntent.getActivity(
             context, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE
@@ -92,4 +95,5 @@ class NotificationViewModel : ViewModel() {
             }
         }
     }
+}
 }
