@@ -98,7 +98,8 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
                 showDialog = true
                 println("Bouton cliqué, showDialog apres : $showDialog")
             },
-            enabled = selectedDate.isNotEmpty()
+            enabled = selectedDate.isNotEmpty(),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF26A69A))
         ) {
             Text(text = "Ajouter un événement")
         }
