@@ -1,9 +1,6 @@
 package fr.isen.laval.isensmartcompanion.screens
 
-import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,13 +16,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.shape.CircleShape
-import fr.isen.laval.isensmartcompanion.ui.theme.ISENSmartCompanionTheme
-import fr.isen.laval.isensmartcompanion.ai.GeminiApiHelper
 import kotlinx.coroutines.launch
 import com.google.ai.client.generativeai.GenerativeModel
 import fr.isen.laval.isensmartcompanion.data.InteractionViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.Dispatchers
@@ -37,7 +31,8 @@ fun AssistantScreen(viewModel: InteractionViewModel = viewModel()) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
-    val generativeModel = GenerativeModel("gemini-1.5-flash", "AIzaSyBguWA9SSbLDlRrO6e5RZo3WoZkPpEl7as")
+    val generativeModel = GenerativeModel("gemini-1.5-flash", "AIzaSyDnF7yGPomooqLkOQ77nfoXbxI0z1xjO-k")
+
 
     Box(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Column(
@@ -68,7 +63,7 @@ fun AssistantScreen(viewModel: InteractionViewModel = viewModel()) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(12.dp))
-                        .background(Color(0xFFFFF9C4))
+                        .background(Color.LightGray)
                         .padding(12.dp)
                 ) {
                     Text(" $aiResponse", fontSize = 16.sp)
