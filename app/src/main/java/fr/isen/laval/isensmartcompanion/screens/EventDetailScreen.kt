@@ -135,7 +135,7 @@ fun EventDetailContent(event: Event, notificationViewModel: NotificationViewMode
             Button(
                 onClick = { notificationViewModel.sendNotification(context, event.title, event.description) },
                 modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6D9886))
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB0BEC5))
             ) {
                 Text(
                     text = "🔔 Activer un rappel",
@@ -158,7 +158,7 @@ fun DetailItem(label: String, value: String, icon: androidx.compose.ui.graphics.
         Icon(
             imageVector = icon,
             contentDescription = label,
-            tint = Color(0xFF6D9886),
+            tint = Color(0xFFB0BEC5),
             modifier = Modifier.size(24.dp)
         )
         Spacer(modifier = Modifier.width(12.dp))
