@@ -25,6 +25,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import fr.isen.laval.isensmartcompanion.data.DataStoreManager
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+
 
 
 
@@ -44,9 +46,11 @@ class AgendaScreen : ComponentActivity() {
 fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
     var selectedDate by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
+    var showEditDialog by remember { mutableStateOf(false) }
     var eventName by remember { mutableStateOf("") }
     var eventLocation by remember { mutableStateOf("") }
-    var eventTime by remember { mutableStateOf("") } // Ajout pour l'heure de l'événement
+    var eventTime by remember { mutableStateOf("") }
+    var editingEventIndex by remember { mutableStateOf(-1) } // Pour identifier l'événement à éditer
 
     val events = remember { mutableStateMapOf<String, MutableList<Pair<String, String>>>() }
     val coroutineScope = rememberCoroutineScope()
@@ -93,9 +97,7 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
 
         Button(
             onClick = {
-                println("Bouton cliqué, showDialog avant : $showDialog")
                 showDialog = true
-                println("Bouton cliqué, showDialog apres : $showDialog")
             },
             enabled = selectedDate.isNotEmpty(),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF26A69A))
@@ -156,6 +158,19 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
                                 }
 
                                 Spacer(modifier = Modifier.weight(1f))
+
+                                // Bouton pour modifier l'événement
+                                IconButton(onClick = {
+                                    eventName = event.first
+                                    eventLocation = event.second.split(" à ")[0] // Assumer que l'heure est après "à"
+                                    eventTime = event.second.split(" à ")[1] // Extraire l'heure
+                                    editingEventIndex = index
+                                    showEditDialog = true
+                                }) {
+                                    Icon(Icons.Default.Edit, contentDescription = "Modifier")
+                                }
+
+                                // Bouton pour supprimer l'événement
                                 IconButton(onClick = {
                                     events[selectedDate]?.removeAt(index)
                                     coroutineScope.launch {
@@ -171,7 +186,7 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
             }
         }
 
-        // Affichage du Dialog seulement si showDialog est à true
+        // Affichage du Dialog pour ajouter un événement seulement si showDialog est à true
         if (showDialog) {
             AlertDialog(
                 onDismissRequest = { showDialog = false },
@@ -209,23 +224,14 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
                 confirmButton = {
                     Button(
                         onClick = {
-                            println("eventName avant sauvegarde: $eventName")
-                            println("eventLocation avant sauvegarde: $eventLocation")
-                            println("eventTime avant sauvegarde: $eventTime") // Affiche l'heure dans les logs
                             if (selectedDate.isNotEmpty() && eventName.isNotEmpty() && eventLocation.isNotEmpty() && eventTime.isNotEmpty()) {
-                                val newEvent = Pair(eventName, "$eventLocation à $eventTime") // Ajoute l'heure au lieu
+                                val newEvent = Pair(eventName, "$eventLocation à $eventTime")
                                 if (events[selectedDate] == null) {
                                     events[selectedDate] = mutableListOf()
                                 }
                                 events[selectedDate]?.add(newEvent)
-                                println("events avant sauvegarde: $events")
                                 coroutineScope.launch {
-                                    try {
-                                        dataStoreManager.saveEvent(selectedDate, events[selectedDate] ?: emptyList())
-                                        println("Événement sauvegardé dans DataStore")
-                                    } catch (e: Exception) {
-                                        println("Erreur lors de la sauvegarde : ${e.message}")
-                                    }
+                                    dataStoreManager.saveEvent(selectedDate, events[selectedDate] ?: emptyList())
                                 }
                             }
                             eventName = ""
@@ -239,8 +245,70 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
                     }
                 },
                 dismissButton = {
-                    TextButton(onClick = { showDialog = false },
-                        colors = ButtonDefaults.textButtonColors(contentColor = Color(0xFF26A69A))){
+                    TextButton(onClick = { showDialog = false }) {
+                        Text("Annuler")
+                    }
+                }
+            )
+        }
+
+        // Affichage du Dialog pour éditer un événement
+        if (showEditDialog) {
+            AlertDialog(
+                onDismissRequest = { showEditDialog = false },
+                title = { Text(text = "Modifier l'événement") },
+                text = {
+                    Column {
+                        Text(text = "Nom de l'événement :")
+                        OutlinedTextField(
+                            value = eventName,
+                            onValueChange = { eventName = it },
+                            placeholder = { Text("Ex: Réunion") },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Text(text = "Localisation :")
+                        OutlinedTextField(
+                            value = eventLocation,
+                            onValueChange = { eventLocation = it },
+                            placeholder = { Text("Ex: Bureau") },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        // Champ pour l'heure de l'événement
+                        Text(text = "Heure de l'événement :")
+                        OutlinedTextField(
+                            value = eventTime,
+                            onValueChange = { eventTime = it },
+                            placeholder = { Text("Ex: 14:30") },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            if (selectedDate.isNotEmpty() && eventName.isNotEmpty() && eventLocation.isNotEmpty() && eventTime.isNotEmpty()) {
+                                val updatedEvent = Pair(eventName, "$eventLocation à $eventTime")
+                                events[selectedDate]?.set(editingEventIndex, updatedEvent)
+                                coroutineScope.launch {
+                                    dataStoreManager.saveEvent(selectedDate, events[selectedDate] ?: emptyList())
+                                }
+                            }
+                            eventName = ""
+                            eventLocation = ""
+                            eventTime = "" // Réinitialisation de l'heure
+                            showEditDialog = false
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF26A69A))
+                    ) {
+                        Text("Modifier")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showEditDialog = false }) {
                         Text("Annuler")
                     }
                 }
@@ -248,6 +316,5 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
         }
     }
 }
-
 
 
