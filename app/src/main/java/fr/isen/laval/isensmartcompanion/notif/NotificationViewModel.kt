@@ -38,7 +38,7 @@ class NotificationViewModel : ViewModel() {
         }
     }
 
-    // Fonction pour envoyer une notification immédiate
+    // Fonction pour envoyer une notification
     fun sendNotification(context: Context, eventTitle: String, eventDescription: String) {
         createNotificationChannel(context)
 
@@ -66,7 +66,7 @@ class NotificationViewModel : ViewModel() {
         }
     }
 
-    // Fonction pour planifier une notification (après un délai, par exemple)
+
     fun scheduleNotification(context: Context, eventTitle: String, eventDescription: String, delayMillis: Long) {
         createNotificationChannel(context)
 
@@ -83,7 +83,6 @@ class NotificationViewModel : ViewModel() {
             .setAutoCancel(true)
             .build()
 
-        // Utilisation de viewModelScope pour gérer les tâches asynchrones
         viewModelScope.launch(Dispatchers.Main) {
             delay(delayMillis)
             if (NotificationManagerCompat.from(context).areNotificationsEnabled()) {

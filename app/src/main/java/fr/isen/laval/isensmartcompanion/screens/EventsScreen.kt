@@ -22,7 +22,7 @@ import androidx.navigation.NavController
 
 
 @Composable
-fun EventsScreen(navController: NavController, eventsViewModel: EventsViewModel) { // ✅ Ajout du paramètre
+fun EventsScreen(navController: NavController, eventsViewModel: EventsViewModel) {
     val events by remember { derivedStateOf { eventsViewModel.events } }
 
     Scaffold(
@@ -73,7 +73,7 @@ fun EventItem(event: Event, navController: NavController) {
             .clickable {
                 navController.navigate("eventDetail/${event.id}")
             },
-        shape = RoundedCornerShape(12.dp), // Coins arrondis
+        shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(6.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color(0xFFEEEEEE) // Fond
@@ -91,8 +91,8 @@ fun EventItem(event: Event, navController: NavController) {
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF212121),
-                textAlign = TextAlign.Center, // Assurer un centrage horizontal du texte
-                modifier = Modifier.fillMaxWidth() // Prendre toute la largeur disponible
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }

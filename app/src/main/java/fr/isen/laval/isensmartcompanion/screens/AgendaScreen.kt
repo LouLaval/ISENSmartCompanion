@@ -50,7 +50,7 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
     var eventName by remember { mutableStateOf("") }
     var eventLocation by remember { mutableStateOf("") }
     var eventTime by remember { mutableStateOf("") }
-    var editingEventIndex by remember { mutableStateOf(-1) } // Pour identifier l'événement à éditer
+    var editingEventIndex by remember { mutableStateOf(-1) }
 
     val events = remember { mutableStateMapOf<String, MutableList<Pair<String, String>>>() }
     val coroutineScope = rememberCoroutineScope()
@@ -162,8 +162,8 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
                                 // Bouton pour modifier l'événement
                                 IconButton(onClick = {
                                     eventName = event.first
-                                    eventLocation = event.second.split(" à ")[0] // Assumer que l'heure est après "à"
-                                    eventTime = event.second.split(" à ")[1] // Extraire l'heure
+                                    eventLocation = event.second.split(" à ")[0]
+                                    eventTime = event.second.split(" à ")[1]
                                     editingEventIndex = index
                                     showEditDialog = true
                                 }) {
@@ -211,7 +211,6 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
                         )
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        // Ajout du champ pour l'heure de l'événement
                         Text(text = "Heure de l'événement :")
                         OutlinedTextField(
                             value = eventTime,
@@ -236,7 +235,7 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
                             }
                             eventName = ""
                             eventLocation = ""
-                            eventTime = "" // Réinitialisation de l'heure
+                            eventTime = ""
                             showDialog = false
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF26A69A))
@@ -277,7 +276,6 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
                         )
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        // Champ pour l'heure de l'événement
                         Text(text = "Heure de l'événement :")
                         OutlinedTextField(
                             value = eventTime,
@@ -299,7 +297,7 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
                             }
                             eventName = ""
                             eventLocation = ""
-                            eventTime = "" // Réinitialisation de l'heure
+                            eventTime = ""
                             showEditDialog = false
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF26A69A))
