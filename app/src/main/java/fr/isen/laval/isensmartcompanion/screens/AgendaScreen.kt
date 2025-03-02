@@ -153,21 +153,24 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
                                         color = Color(0xFF616161)
                                     )
                                 }
-                            }
-                            Spacer(modifier = Modifier.weight(1f))
-                            IconButton(onClick = {
-                                events[selectedDate]?.removeAt(index)
-                                coroutineScope.launch {
-                                    dataStoreManager.saveEvent(selectedDate, events[selectedDate] ?: emptyList())
+
+                                Spacer(modifier = Modifier.weight(1f))
+                                IconButton(onClick = {
+                                    events[selectedDate]?.removeAt(index)
+                                    coroutineScope.launch {
+                                        dataStoreManager.saveEvent(selectedDate, events[selectedDate] ?: emptyList())
+                                    }
+                                }) {
+                                    Icon(Icons.Default.Delete, contentDescription = "Supprimer")
                                 }
-                            }) {
-                                Icon(Icons.Default.Delete, contentDescription = "Supprimer")
                             }
                         }
                     }
                 }
             }
         }
+
+        // Affichage du Dialog seulement si showDialog est à true
         if (showDialog) {
             AlertDialog(
                 onDismissRequest = { showDialog = false },
@@ -208,7 +211,6 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
                                     try {
                                         dataStoreManager.saveEvent(selectedDate, events[selectedDate] ?: emptyList())
                                         println("Événement sauvegardé dans DataStore")
-                                        println("events après sauvegarde: $events")
                                     } catch (e: Exception) {
                                         println("Erreur lors de la sauvegarde : ${e.message}")
                                     }
@@ -225,7 +227,7 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
                 },
                 dismissButton = {
                     TextButton(onClick = { showDialog = false },
-                    colors = ButtonDefaults.textButtonColors(contentColor = Color(0xFF26A69A))){
+                        colors = ButtonDefaults.textButtonColors(contentColor = Color(0xFF26A69A))){
                         Text("Annuler")
                     }
                 }
@@ -233,3 +235,5 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
         }
     }
 }
+
+
