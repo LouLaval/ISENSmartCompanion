@@ -46,6 +46,7 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
     var showDialog by remember { mutableStateOf(false) }
     var eventName by remember { mutableStateOf("") }
     var eventLocation by remember { mutableStateOf("") }
+    var eventTime by remember { mutableStateOf("") } // Ajout pour l'heure de l'événement
 
     val events = remember { mutableStateMapOf<String, MutableList<Pair<String, String>>>() }
     val coroutineScope = rememberCoroutineScope()
@@ -193,6 +194,16 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
                             placeholder = { Text("Ex: Bureau") },
                             modifier = Modifier.fillMaxWidth()
                         )
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        // Ajout du champ pour l'heure de l'événement
+                        Text(text = "Heure de l'événement :")
+                        OutlinedTextField(
+                            value = eventTime,
+                            onValueChange = { eventTime = it },
+                            placeholder = { Text("Ex: 14:30") },
+                            modifier = Modifier.fillMaxWidth()
+                        )
                     }
                 },
                 confirmButton = {
@@ -200,8 +211,9 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
                         onClick = {
                             println("eventName avant sauvegarde: $eventName")
                             println("eventLocation avant sauvegarde: $eventLocation")
-                            if (selectedDate.isNotEmpty() && eventName.isNotEmpty() && eventLocation.isNotEmpty()) {
-                                val newEvent = Pair(eventName, eventLocation)
+                            println("eventTime avant sauvegarde: $eventTime") // Affiche l'heure dans les logs
+                            if (selectedDate.isNotEmpty() && eventName.isNotEmpty() && eventLocation.isNotEmpty() && eventTime.isNotEmpty()) {
+                                val newEvent = Pair(eventName, "$eventLocation à $eventTime") // Ajoute l'heure au lieu
                                 if (events[selectedDate] == null) {
                                     events[selectedDate] = mutableListOf()
                                 }
@@ -218,6 +230,7 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
                             }
                             eventName = ""
                             eventLocation = ""
+                            eventTime = "" // Réinitialisation de l'heure
                             showDialog = false
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF26A69A))
@@ -235,5 +248,6 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
         }
     }
 }
+
 
 
