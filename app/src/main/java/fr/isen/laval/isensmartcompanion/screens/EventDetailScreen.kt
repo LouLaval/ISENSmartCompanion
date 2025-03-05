@@ -1,6 +1,5 @@
 package fr.isen.laval.isensmartcompanion.screens
 
-
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
