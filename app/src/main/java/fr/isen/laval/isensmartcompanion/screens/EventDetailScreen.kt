@@ -17,10 +17,7 @@ import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.LocationOn
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Context
-import android.os.Build
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -38,9 +35,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.app.NotificationCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
-import fr.isen.laval.isensmartcompanion.R
 import fr.isen.laval.isensmartcompanion.notif.NotificationViewModel
 
 
@@ -48,14 +43,6 @@ import fr.isen.laval.isensmartcompanion.notif.NotificationViewModel
 class EventDetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val eventTitle = intent.getStringExtra("event_title") ?: "Événement"
-        val eventDescription = intent.getStringExtra("event_description") ?: "Aucune description disponible"
-        val eventDate = intent.getStringExtra("event_date") ?: "Date inconnue"
-        val eventLocation = intent.getStringExtra("event_location") ?: "Lieu inconnu"
-        val eventCategory = intent.getStringExtra("event_category") ?: "Catégorie inconnue"
-
-
     }
 }
 
@@ -67,7 +54,7 @@ fun EventDetailScreen(
     notificationViewModel: NotificationViewModel = viewModel()
 ) {
     val eventId = backStackEntry.arguments?.getString("eventId")
-    val event = eventsViewModel.events.find { it.id.toString() == eventId }
+    val event = eventsViewModel.events.find { it.id == eventId }
     val context = LocalContext.current
 
     Scaffold(
@@ -103,7 +90,7 @@ fun EventDetailContent(event: Event, notificationViewModel: NotificationViewMode
         text = event.title,
         fontSize = 30.sp,
         fontWeight = FontWeight.Bold,
-        color = Color(0xFF263238)
+        color = Color(0xFF666666)
     )
 
     Spacer(modifier = Modifier.height(16.dp))
@@ -129,7 +116,7 @@ fun EventDetailContent(event: Event, notificationViewModel: NotificationViewMode
             Text(
                 text = event.description,
                 fontSize = 18.sp,
-                color = Color(0xFF37474F),
+                color = Color(0xFF666666),
                 lineHeight = 24.sp
             )
 
@@ -138,9 +125,9 @@ fun EventDetailContent(event: Event, notificationViewModel: NotificationViewMode
             Button(
                 onClick = { notificationViewModel.sendNotification(context, event.title, event.description) },
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .shadow(4.dp, RoundedCornerShape(12.dp)),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF607D8B))
+                    .fillMaxWidth(),
+                    //.shadow(4.dp, RoundedCornerShape(12.dp)),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF6F6F))
             ) {
                 Text(
                     text = "🔔 Activer un rappel",
@@ -164,7 +151,7 @@ fun DetailItem(label: String, value: String, icon: androidx.compose.ui.graphics.
         Icon(
             imageVector = icon,
             contentDescription = label,
-            tint = Color(0xFF607D8B),
+            tint = Color(0xFFFF6F6F),
             modifier = Modifier.size(28.dp)
         )
         Spacer(modifier = Modifier.width(14.dp))
@@ -173,12 +160,12 @@ fun DetailItem(label: String, value: String, icon: androidx.compose.ui.graphics.
                 text = label,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF607D8B)
+                color = Color(0xFF666666)
             )
             Text(
                 text = value,
                 fontSize = 18.sp,
-                color = Color(0xFF607D8B)
+                color = Color(0xFF666666)
             )
         }
     }
@@ -201,36 +188,6 @@ fun EventDetailTopBar(navController: NavController) {
                 color = Color.White
             )
         },
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF607D8B))
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFFFF6F6F))
     )
-}
-
-fun sendNotification(context: Context, eventTitle: String, eventDescription: String) {
-    val channelId = "event_reminders"
-    val notificationId = eventTitle.hashCode()
-
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        val channel = NotificationChannel(
-            channelId,
-            "Rappels d'événements",
-            NotificationManager.IMPORTANCE_DEFAULT
-        ).apply {
-            description = "Notifications pour les rappels d'événements"
-        }
-
-        val notificationManager: NotificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
-    }
-
-
-    val notification = NotificationCompat.Builder(context, channelId)
-        .setSmallIcon(R.drawable.ic_launcher_foreground)
-        .setContentTitle("Rappel : $eventTitle")
-        .setContentText(eventDescription)
-        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        .setAutoCancel(true)
-        .build()
-
 }

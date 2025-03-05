@@ -102,7 +102,7 @@ fun NavigationGraph(navController: NavHostController, dataStoreManager: DataStor
         }
         composable(Screen.History.route) { HistoryScreen() }
         composable(Screen.Agenda.route) {
-            AgendaScreenContent(dataStoreManager)  // Passer DataStoreManager ici
+            AgendaScreenContent(dataStoreManager)
         }
         composable("eventDetail/{eventId}") { backStackEntry ->
             val eventId = backStackEntry.arguments?.getString("eventId")
