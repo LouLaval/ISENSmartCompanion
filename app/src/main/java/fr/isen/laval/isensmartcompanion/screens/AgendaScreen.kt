@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Category
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -26,8 +27,7 @@ import java.util.*
 import fr.isen.laval.isensmartcompanion.data.DataStoreManager
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-
-
+import androidx.compose.ui.draw.shadow
 
 
 class AgendaScreen : ComponentActivity() {
@@ -100,9 +100,16 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
                 showDialog = true
             },
             enabled = selectedDate.isNotEmpty(),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF26A69A))
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00796B)),
+            shape = RoundedCornerShape(50.dp),
+            modifier = Modifier
+                .height(56.dp)
+                .padding(horizontal = 16.dp)
+                .shadow(4.dp, RoundedCornerShape(50.dp))
         ) {
-            Text(text = "Ajouter un événement")
+            Icon(imageVector = Icons.Default.Add, contentDescription = "Ajouter", tint = Color.White)
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = "Ajouter un événement", color = Color.White)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
