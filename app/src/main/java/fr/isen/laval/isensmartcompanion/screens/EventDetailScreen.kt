@@ -126,7 +126,6 @@ fun EventDetailContent(event: Event, notificationViewModel: NotificationViewMode
                 onClick = { notificationViewModel.sendNotification(context, event.title, event.description) },
                 modifier = Modifier
                     .fillMaxWidth(),
-                    //.shadow(4.dp, RoundedCornerShape(12.dp)),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF6F6F))
             ) {
                 Text(

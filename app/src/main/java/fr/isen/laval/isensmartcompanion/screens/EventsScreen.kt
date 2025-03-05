@@ -78,7 +78,7 @@ fun EventItem(event: Event, navController: NavController) {
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(6.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFEEEEEE) // Fond
+            containerColor = Color(0xFFEEEEEE)
         )
     ) {
         Row(

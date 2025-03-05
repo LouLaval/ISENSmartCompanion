@@ -159,7 +159,7 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
 
                                 Spacer(modifier = Modifier.weight(1f))
 
-                                // Bouton pour modifier l'événement
+
                                 IconButton(onClick = {
                                     eventName = event.first
                                     eventLocation = event.second.split(" à ")[0]
@@ -170,7 +170,7 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
                                     Icon(Icons.Default.Edit, contentDescription = "Modifier")
                                 }
 
-                                // Bouton pour supprimer l'événement
+
                                 IconButton(onClick = {
                                     events[selectedDate]?.removeAt(index)
                                     coroutineScope.launch {
@@ -186,7 +186,7 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
             }
         }
 
-        // Affichage du Dialog pour ajouter un événement seulement si showDialog est à true
+
         if (showDialog) {
             AlertDialog(
                 onDismissRequest = { showDialog = false },
@@ -251,7 +251,7 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
             )
         }
 
-        // Affichage du Dialog pour éditer un événement
+
         if (showEditDialog) {
             AlertDialog(
                 onDismissRequest = { showEditDialog = false },

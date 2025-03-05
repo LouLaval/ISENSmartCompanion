@@ -41,7 +41,7 @@ fun AssistantScreen(viewModel: InteractionViewModel = viewModel()) {
         ) {
             Spacer(modifier = Modifier.height(40.dp))
 
-            // Logo et titre
+
             Text(
                 text = "ISEN",
                 fontSize = 40.sp,
@@ -57,7 +57,7 @@ fun AssistantScreen(viewModel: InteractionViewModel = viewModel()) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Affichage de la réponse
+
             if (aiResponse.isNotEmpty()) {
                 Box(
                     modifier = Modifier
@@ -72,7 +72,7 @@ fun AssistantScreen(viewModel: InteractionViewModel = viewModel()) {
 
             Spacer(modifier = Modifier.weight(1f))
 
-            // Barre de saisie et bouton d'envoi
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -132,9 +132,9 @@ fun AssistantScreen(viewModel: InteractionViewModel = viewModel()) {
 
 private suspend fun getAIResponse(generativeModel: GenerativeModel, input: String): String {
     return try {
-        println("🔍 Question envoyée : $input")
+        println(" Question envoyée : $input")
         val response = generativeModel.generateContent(input).text
-        println("📝 Réponse brute reçue : $response")
+        println(" Réponse brute reçue : $response")
 
         response ?: "Aucune réponse obtenue"
     } catch (e: Exception) {
