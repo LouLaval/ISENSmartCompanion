@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.ui.text.style.TextAlign
 
 @Composable
 fun HistoryScreen(viewModel: InteractionViewModel = viewModel()) {
@@ -30,6 +31,21 @@ fun HistoryScreen(viewModel: InteractionViewModel = viewModel()) {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Text(
+            text = "ISEN",
+            fontSize = 40.sp,
+            color = Color.Red,
+            textAlign = TextAlign.Center
+        )
+        Text(
+            text = "Smart Companion",
+            fontSize = 20.sp,
+            color = Color.Gray,
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
         Text(
             text = "Historique",
             fontSize = 22.sp,
@@ -84,7 +100,7 @@ fun HistoryScreen(viewModel: InteractionViewModel = viewModel()) {
                 .padding(horizontal = 16.dp),
             shape = MaterialTheme.shapes.medium
         ) {
-            Text("🗑 Effacer l'historique", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+            Text("\uD83D\uDDD1 Effacer l'historique", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Medium)
         }
     }
 }

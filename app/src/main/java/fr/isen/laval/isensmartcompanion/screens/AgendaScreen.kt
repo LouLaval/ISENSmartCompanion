@@ -103,8 +103,8 @@ fun AgendaScreenContent(dataStoreManager: DataStoreManager) {
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00796B)),
             shape = RoundedCornerShape(50.dp),
             modifier = Modifier
-                .height(56.dp)
-                .padding(horizontal = 16.dp)
+                .height(50.dp)
+                .padding(horizontal = 12.dp)
                 .shadow(4.dp, RoundedCornerShape(50.dp))
         ) {
             Icon(imageVector = Icons.Default.Add, contentDescription = "Ajouter", tint = Color.White)
