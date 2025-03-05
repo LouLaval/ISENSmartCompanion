@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.*
 import androidx.compose.ui.Alignment
 import androidx.compose.runtime.Composable
@@ -79,20 +81,25 @@ fun EventItem(event: Event, navController: NavController) {
             containerColor = Color(0xFFEEEEEE) // Fond
         )
     ) {
-        Column(
+        Row(
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            verticalAlignment = Alignment.CenterVertically
         ) {
-
             Text(
                 text = event.title,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF212121),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
+                textAlign = TextAlign.Start,
+                modifier = Modifier.weight(1f)
+            )
+
+            Icon(
+                imageVector = Icons.Default.ArrowForward,
+                contentDescription = "Voir les détails",
+                tint = Color(0xFF616161)
             )
         }
     }

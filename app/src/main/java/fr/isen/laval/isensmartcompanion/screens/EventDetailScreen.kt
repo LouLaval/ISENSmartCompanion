@@ -37,6 +37,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -71,13 +72,14 @@ fun EventDetailScreen(
     val context = LocalContext.current
 
     Scaffold(
-        topBar = { EventDetailTopBar(navController) }
+        topBar = { EventDetailTopBar(navController) },
+        containerColor = Color(0xFFF2F2F2)
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(20.dp),
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (event == null) {
@@ -100,47 +102,52 @@ fun EventDetailContent(event: Event, notificationViewModel: NotificationViewMode
 
     Text(
         text = event.title,
-        fontSize = 28.sp,
+        fontSize = 30.sp,
         fontWeight = FontWeight.Bold,
-        color = Color(0xFF37474F)
+        color = Color(0xFF263238)
     )
 
     Spacer(modifier = Modifier.height(16.dp))
 
     Card(
-        shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(8.dp),
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFF8F9FA))
+        shape = RoundedCornerShape(20.dp),
+        elevation = CardDefaults.cardElevation(12.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(4.dp, RoundedCornerShape(20.dp)),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Column(
-            modifier = Modifier.padding(20.dp),
+            modifier = Modifier.padding(24.dp),
             horizontalAlignment = Alignment.Start
         ) {
             DetailItem(label = "Date", value = event.date, icon = Icons.Default.CalendarToday)
             DetailItem(label = "Lieu", value = event.location, icon = Icons.Default.LocationOn)
             DetailItem(label = "Catégorie", value = event.category, icon = Icons.Default.Label)
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Text(
                 text = event.description,
-                fontSize = 16.sp,
-                color = Color(0xFF546E7A),
-                lineHeight = 22.sp
+                fontSize = 18.sp,
+                color = Color(0xFF37474F),
+                lineHeight = 24.sp
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Button(
                 onClick = { notificationViewModel.sendNotification(context, event.title, event.description) },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB0BEC5))
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .shadow(4.dp, RoundedCornerShape(12.dp)),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF607D8B))
             ) {
                 Text(
                     text = "🔔 Activer un rappel",
                     color = Color.White,
-                    fontSize = 16.sp
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium
                 )
             }
         }
@@ -152,27 +159,27 @@ fun DetailItem(label: String, value: String, icon: androidx.compose.ui.graphics.
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 6.dp),
+            .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
             imageVector = icon,
             contentDescription = label,
-            tint = Color(0xFFB0BEC5),
-            modifier = Modifier.size(24.dp)
+            tint = Color(0xFF607D8B),
+            modifier = Modifier.size(28.dp)
         )
-        Spacer(modifier = Modifier.width(12.dp))
+        Spacer(modifier = Modifier.width(14.dp))
         Column {
             Text(
                 text = label,
-                fontSize = 14.sp,
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF525252)
+                color = Color(0xFF607D8B)
             )
             Text(
                 text = value,
-                fontSize = 16.sp,
-                color = Color(0xFF2E2E2E)
+                fontSize = 18.sp,
+                color = Color(0xFF607D8B)
             )
         }
     }
@@ -190,12 +197,12 @@ fun EventDetailTopBar(navController: NavController) {
         title = {
             Text(
                 text = "Détails de l'événement",
-                fontSize = 20.sp,
+                fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF2E2E2E)
+                color = Color.White
             )
         },
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFFB0BEC5))
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF607D8B))
     )
 }
 
